@@ -1,0 +1,17 @@
+.vs
+*.sln
+.htm
+.github/
+Binaries/
+Build/
+Config/*
+Content/ExternalContent/
+DerivedDataCache/
+Intermediate/
+Saved/
+Script/
+
+!Config/DefaultEngine.ini
+!Config/DefaultGameplayTags.ini
+UpgradeLog.htm
+enc_temp_folder
