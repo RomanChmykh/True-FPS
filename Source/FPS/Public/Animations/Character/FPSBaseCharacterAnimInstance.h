@@ -18,13 +18,14 @@ class FPS_API UFPSBaseCharacterAnimInstance : public UAnimInstance
 public:
     UFPSBaseCharacterAnimInstance(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+    void UpdatePitch(double InputPitch);
+
 protected:
     virtual void NativeUpdateAnimation(float DeltaSeconds) override;
     virtual void NativeInitializeAnimation() override;
 
     float GetMovementDirection() const;
-    float GetPitch() const;
-    void UpdatedIsFalling();
+    void UpdateIsFalling();
     void UpdateSpeed();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Speed", meta = (ClampMin = "0.0", ClampMax = "5000.0", ToolTip = "Real speed for movement, also use like speed for animations"))

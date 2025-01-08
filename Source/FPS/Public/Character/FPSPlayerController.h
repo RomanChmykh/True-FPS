@@ -38,5 +38,7 @@ private:
 
     void Look(const FInputActionValue& Value);
 
+    void UpdatePitch(const FInputActionValue& Value);
+
     bool bInvertLookAxis;
 };

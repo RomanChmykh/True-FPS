@@ -5,6 +5,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Components/FPSInputComponent.h"
+#include "Animations/Character/FPSBaseCharacterAnimInstance.h"
 #include "InputActionValue.h"
 #include "FPSPlayerController.h"
 
@@ -39,6 +40,9 @@ void AFPSPlayerController::BeginPlay()
 
         /* Looking */
         EnhancedInputComponent->BindAction(FPSInputComponent->LookAction, ETriggerEvent::Triggered, this, &AFPSPlayerController::Look);
+
+        /* Pitch */
+        EnhancedInputComponent->BindAction(FPSInputComponent->LookAction, ETriggerEvent::Triggered, this, &AFPSPlayerController::UpdatePitch);
     }
 }
 
@@ -57,4 +61,19 @@ void AFPSPlayerController::Look(const FInputActionValue& Value)
 
     LookAxisVector *= bInvertLookAxis ? -1 : 1;
     PlayerCharacter->Look(LookAxisVector);
+}
+
+void AFPSPlayerController::UpdatePitch(const FInputActionValue& Value)
+{
+    AFPSCharacter* const PlayerCharacter = GetPawn<AFPSCharacter>();
+    if (!PlayerCharacter) return;
+
+    USkeletalMeshComponent* const SkeletalMesh = PlayerCharacter->GetMesh();
+    if (!SkeletalMesh) return;
+
+    UFPSBaseCharacterAnimInstance* AnimInstance = Cast<UFPSBaseCharacterAnimInstance>(SkeletalMesh->GetAnimInstance());
+    if (!AnimInstance) return;
+
+    FVector2D LookAxisVector = Value.Get<FVector2D>();
+    AnimInstance->UpdatePitch(LookAxisVector.Y * 0.5);
 }

@@ -2,7 +2,13 @@
 
 #include "Animations/Character/FPSBaseCharacterAnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "EnhancedInputComponent.h"       
+#include "EnhancedInputSubsystems.h"      
+#include "InputAction.h" 
 #include "Character/FPSCharacter.h"
+#include "Character/FPSPlayerController.h"
+#include "Components/FPSInputComponent.h"
+
 
 UFPSBaseCharacterAnimInstance::UFPSBaseCharacterAnimInstance(const FObjectInitializer& ObjectInitializer)
     : Speed(0.0f), Direction(0.0f), Pitch(0.0f), bIsFalling(false)
@@ -14,8 +20,7 @@ void UFPSBaseCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
     Super::NativeUpdateAnimation(DeltaSeconds);
 
     Direction = GetMovementDirection();
-    Pitch = GetPitch();
-    UpdatedIsFalling();
+    UpdateIsFalling();
     UpdateSpeed();
 }
 
@@ -45,15 +50,13 @@ float UFPSBaseCharacterAnimInstance::GetMovementDirection() const
     return CrossProduct.IsZero() ? Degrees : Degrees * FMath::Sign(CrossProduct.Z);
 }
 
-float UFPSBaseCharacterAnimInstance::GetPitch() const
+void UFPSBaseCharacterAnimInstance::UpdatePitch(double InputPitch)
 {
-    APawn* const Owner = Cast<APawn>(GetOwningActor());
-    if (!Owner) return 0.0f;
-
-    return Owner->GetBaseAimRotation().Pitch;
+    float NewPitch = Pitch + InputPitch;
+    Pitch = FMath::Clamp(NewPitch, -18.0f, 18.0f); // -18 and 18 its clamp for 5 bones that in summary clamp pitch eagle from -90 to 90
 }
 
-void UFPSBaseCharacterAnimInstance::UpdatedIsFalling()
+void UFPSBaseCharacterAnimInstance::UpdateIsFalling()
 {
     if (!PlayerCharacter) return;
 
