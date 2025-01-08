@@ -42,7 +42,7 @@ void AFPSPlayerController::BeginPlay()
         EnhancedInputComponent->BindAction(FPSInputComponent->LookAction, ETriggerEvent::Triggered, this, &AFPSPlayerController::Look);
 
         /* Pitch */
-        EnhancedInputComponent->BindAction(FPSInputComponent->LookAction, ETriggerEvent::Triggered, this, &AFPSPlayerController::UpdatePitch);
+        EnhancedInputComponent->BindAction(FPSInputComponent->LookAction, ETriggerEvent::Triggered, this, &AFPSPlayerController::UpdatePitchAndYaw);
     }
 }
 
@@ -63,7 +63,7 @@ void AFPSPlayerController::Look(const FInputActionValue& Value)
     PlayerCharacter->Look(LookAxisVector);
 }
 
-void AFPSPlayerController::UpdatePitch(const FInputActionValue& Value)
+void AFPSPlayerController::UpdatePitchAndYaw(const FInputActionValue& Value)
 {
     AFPSCharacter* const PlayerCharacter = GetPawn<AFPSCharacter>();
     if (!PlayerCharacter) return;
@@ -76,4 +76,5 @@ void AFPSPlayerController::UpdatePitch(const FInputActionValue& Value)
 
     FVector2D LookAxisVector = Value.Get<FVector2D>();
     AnimInstance->UpdatePitch(LookAxisVector.Y * 0.5);
+    AnimInstance->UpdateYaw(LookAxisVector.X);
 }

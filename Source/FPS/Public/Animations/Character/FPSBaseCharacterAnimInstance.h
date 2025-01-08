@@ -18,7 +18,8 @@ class FPS_API UFPSBaseCharacterAnimInstance : public UAnimInstance
 public:
     UFPSBaseCharacterAnimInstance(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-    void UpdatePitch(double InputPitch);
+    void UpdatePitch(const double InputPitch);
+    void UpdateYaw(const double InputYaw);
 
 protected:
     virtual void NativeUpdateAnimation(float DeltaSeconds) override;
@@ -36,6 +37,9 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
     float Pitch;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
+    float Yaw;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
     bool bIsFalling;

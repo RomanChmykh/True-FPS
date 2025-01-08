@@ -11,7 +11,7 @@
 
 
 UFPSBaseCharacterAnimInstance::UFPSBaseCharacterAnimInstance(const FObjectInitializer& ObjectInitializer)
-    : Speed(0.0f), Direction(0.0f), Pitch(0.0f), bIsFalling(false)
+    : Speed(0.0f), Direction(0.0f), Pitch(0.0f), Yaw(0.0f), bIsFalling(false)
 {
 }
 
@@ -50,10 +50,16 @@ float UFPSBaseCharacterAnimInstance::GetMovementDirection() const
     return CrossProduct.IsZero() ? Degrees : Degrees * FMath::Sign(CrossProduct.Z);
 }
 
-void UFPSBaseCharacterAnimInstance::UpdatePitch(double InputPitch)
+void UFPSBaseCharacterAnimInstance::UpdatePitch(const double InputPitch)
 {
     float NewPitch = Pitch + InputPitch;
     Pitch = FMath::Clamp(NewPitch, -18.0f, 18.0f); // -18 and 18 its clamp for 5 bones that in summary clamp pitch eagle from -90 to 90
+}
+
+void UFPSBaseCharacterAnimInstance::UpdateYaw(const double InputYaw) 
+{
+    float NewYaw = (InputYaw * 0.6f) + Yaw;
+    Yaw = FMath::Clamp(NewYaw, -10.0f, 10.0f);
 }
 
 void UFPSBaseCharacterAnimInstance::UpdateIsFalling()
@@ -70,5 +76,5 @@ void UFPSBaseCharacterAnimInstance::UpdateSpeed()
 {
     if (!PlayerCharacter) return;
 
-    Speed = PlayerCharacter->GetVelocity().Size();
+    Speed = PlayerCharacter->GetVelocity().Size2D();
 }

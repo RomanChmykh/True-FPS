@@ -38,7 +38,7 @@ private:
 
     void Look(const FInputActionValue& Value);
 
-    void UpdatePitch(const FInputActionValue& Value);
+    void UpdatePitchAndYaw(const FInputActionValue& Value);
 
     bool bInvertLookAxis;
 };
