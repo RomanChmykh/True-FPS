@@ -41,8 +41,12 @@ void AFPSPlayerController::BeginPlay()
         /* Looking */
         EnhancedInputComponent->BindAction(FPSInputComponent->LookAction, ETriggerEvent::Triggered, this, &AFPSPlayerController::Look);
 
-        /* Pitch */
+        /* Pitch and Yaw*/
         EnhancedInputComponent->BindAction(FPSInputComponent->LookAction, ETriggerEvent::Triggered, this, &AFPSPlayerController::UpdatePitchAndYaw);
+
+        /* Jumping*/
+        EnhancedInputComponent->BindAction(FPSInputComponent->JumpAction, ETriggerEvent::Started, PlayerCharacter, &AFPSCharacter::StartJump);
+        EnhancedInputComponent->BindAction(FPSInputComponent->JumpAction, ETriggerEvent::Completed, PlayerCharacter, &AFPSCharacter::StopJump);
     }
 }
 

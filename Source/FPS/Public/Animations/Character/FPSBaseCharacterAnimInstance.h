@@ -32,6 +32,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Speed", meta = (ClampMin = "0.0", ClampMax = "5000.0", ToolTip = "Real speed for movement, also use like speed for animations"))
     float Speed;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
+    FVector Velocity;
+
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
     float Direction;
 

@@ -76,5 +76,6 @@ void UFPSBaseCharacterAnimInstance::UpdateSpeed()
 {
     if (!PlayerCharacter) return;
 
-    Speed = PlayerCharacter->GetVelocity().Size2D();
+    Velocity = PlayerCharacter->GetVelocity();
+    Speed = Velocity.Size2D();
 }

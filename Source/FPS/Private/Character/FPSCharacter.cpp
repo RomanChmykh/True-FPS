@@ -73,6 +73,12 @@ void AFPSCharacter::StartCrouch() {}
 
 void AFPSCharacter::StopCrouch() {}
 
-void AFPSCharacter::StartJump() {}
+void AFPSCharacter::StartJump() 
+{
+    Jump();
+}
 
-void AFPSCharacter::StopJump() {}
+void AFPSCharacter::StopJump()
+{
+    StopJumping();
+}
