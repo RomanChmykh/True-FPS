@@ -32,6 +32,9 @@ public:
     void StartJump();
     void StopJump();
 
+    void StartLean(const float InputRoll);
+    void StopLean();
+
 	#pragma endregion
 
 protected:

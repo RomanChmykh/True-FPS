@@ -40,5 +40,8 @@ private:
 
     void UpdatePitchAndYaw(const FInputActionValue& Value);
 
+    void StartLean(const FInputActionValue& Value);
+    void StopLean(const FInputActionValue& Value);
+
     bool bInvertLookAxis;
 };

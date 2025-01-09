@@ -62,6 +62,44 @@ void UFPSBaseCharacterAnimInstance::UpdateYaw(const double InputYaw)
     Yaw = FMath::Clamp(NewYaw, -10.0f, 10.0f);
 }
 
+void UFPSBaseCharacterAnimInstance::UpdateRoll(const float InputRoll) 
+{
+    UWorld* World = GetOwningActor()->GetWorld();  
+    if (!World) return;
+
+    if (World->GetTimerManager().IsTimerActive(ResetLeaningTimer))
+    {
+        World->GetTimerManager().ClearTimer(ResetLeaningTimer);
+    }
+
+    const float TargetRoll = FMath::GetMappedRangeValueClamped(FVector2D(-1.0f, 1.0f), FVector2D(-10.0f, 10.0f), InputRoll);
+
+    Roll = FMath::FInterpTo(Roll, TargetRoll, World->GetDeltaSeconds(), 10.0f);
+}
+
+void UFPSBaseCharacterAnimInstance::ResetRoll() 
+{
+    if (UWorld* World = GetOwningActor()->GetWorld())  // ????????? ???? ????? ??????
+    {
+        // ?????????? ?????? ? ????????? ????????
+        World->GetTimerManager().SetTimer(
+            ResetLeaningTimer,
+            [this, World]()
+            {
+                // ?????? ???????? Roll ?? 0
+                Roll = FMath::FInterpTo(Roll, 0.0f, World->GetDeltaSeconds(), 10.0f);
+
+                // ???? Roll ????????? ???????? ?? 0, ????????? ??????
+                if (FMath::IsNearlyZero(Roll, 0.01f))
+                {
+                    Roll = 0.0f;
+                    World->GetTimerManager().ClearTimer(ResetLeaningTimer);
+                }
+            },
+            0.01f, true);
+    }
+}
+
 void UFPSBaseCharacterAnimInstance::UpdateIsFalling()
 {
     if (!PlayerCharacter) return;

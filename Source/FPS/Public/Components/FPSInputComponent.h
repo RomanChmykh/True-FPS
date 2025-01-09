@@ -28,6 +28,9 @@ public:
     UPROPERTY(EditDefaultsOnly, Category = Input)
     UInputAction* CrouchAction;
 
+    UPROPERTY(EditDefaultsOnly, Category = Input)
+    UInputAction* LeanAction;
+
 protected:
 	virtual void BeginPlay() override;	
 };

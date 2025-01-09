@@ -47,6 +47,11 @@ void AFPSPlayerController::BeginPlay()
         /* Jumping*/
         EnhancedInputComponent->BindAction(FPSInputComponent->JumpAction, ETriggerEvent::Started, PlayerCharacter, &AFPSCharacter::StartJump);
         EnhancedInputComponent->BindAction(FPSInputComponent->JumpAction, ETriggerEvent::Completed, PlayerCharacter, &AFPSCharacter::StopJump);
+
+        /* Leaning*/
+        EnhancedInputComponent->BindAction(FPSInputComponent->LeanAction, ETriggerEvent::Triggered, this, &AFPSPlayerController::StartLean);
+        EnhancedInputComponent->BindAction(FPSInputComponent->LeanAction, ETriggerEvent::Completed, this, &AFPSPlayerController::StopLean);
+
     }
 }
 
@@ -81,4 +86,20 @@ void AFPSPlayerController::UpdatePitchAndYaw(const FInputActionValue& Value)
     FVector2D LookAxisVector = Value.Get<FVector2D>();
     AnimInstance->UpdatePitch(LookAxisVector.Y * 0.5);
     AnimInstance->UpdateYaw(LookAxisVector.X);
+}
+
+void AFPSPlayerController::StartLean(const FInputActionValue& Value) 
+{
+    AFPSCharacter* const PlayerCharacter = GetPawn<AFPSCharacter>();
+    if (!PlayerCharacter) return;
+
+    PlayerCharacter->StartLean(Value.Get<float>());
+}
+
+void AFPSPlayerController::StopLean(const FInputActionValue& Value) 
+{
+    AFPSCharacter* const PlayerCharacter = GetPawn<AFPSCharacter>();
+    if (!PlayerCharacter) return;
+
+    PlayerCharacter->StopLean();
 }

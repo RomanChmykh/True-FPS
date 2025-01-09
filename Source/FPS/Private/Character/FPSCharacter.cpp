@@ -3,6 +3,7 @@
 #include "Character/FPSCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Animations/Character/FPSBaseCharacterAnimInstance.h"
 
 AFPSCharacter::AFPSCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer), FPCameraSocketName(TEXT("spine_05"))
 {
@@ -81,4 +82,26 @@ void AFPSCharacter::StartJump()
 void AFPSCharacter::StopJump()
 {
     StopJumping();
+}
+
+void AFPSCharacter::StartLean(const float InputRoll) 
+{
+    USkeletalMeshComponent* const SkeletalMesh = GetMesh();
+    if (!SkeletalMesh) return;
+
+    UFPSBaseCharacterAnimInstance* AnimInstance = Cast<UFPSBaseCharacterAnimInstance>(SkeletalMesh->GetAnimInstance());
+    if (!AnimInstance) return;
+
+    AnimInstance->UpdateRoll(InputRoll);
+}
+
+void AFPSCharacter::StopLean() 
+{
+    USkeletalMeshComponent* const SkeletalMesh = GetMesh();
+    if (!SkeletalMesh) return;
+
+    UFPSBaseCharacterAnimInstance* AnimInstance = Cast<UFPSBaseCharacterAnimInstance>(SkeletalMesh->GetAnimInstance());
+    if (!AnimInstance) return;
+
+    AnimInstance->ResetRoll();
 }

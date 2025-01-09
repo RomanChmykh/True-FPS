@@ -20,6 +20,8 @@ public:
 
     void UpdatePitch(const double InputPitch);
     void UpdateYaw(const double InputYaw);
+    void UpdateRoll(const float InputRoll);
+    void ResetRoll();
 
 protected:
     virtual void NativeUpdateAnimation(float DeltaSeconds) override;
@@ -45,8 +47,13 @@ protected:
     float Yaw;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
+    float Roll;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
     bool bIsFalling;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     AFPSCharacter* PlayerCharacter;
+
+    FTimerHandle ResetLeaningTimer; // timer for reset roll to default value after leaning
 };
