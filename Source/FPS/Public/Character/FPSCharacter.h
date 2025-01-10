@@ -4,13 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Interfaces/FPSInteractebleInterface.h"
 #include "FPSCharacter.generated.h"
 
 class UCameraComponent;
 class USkeletalMeshComponent;
+class UFPSWeaponComponent;
 
 UCLASS()
-class FPS_API AFPSCharacter : public ACharacter
+class FPS_API AFPSCharacter : public ACharacter, public IFPSInteractebleInterface
 {
 	GENERATED_BODY()
 
@@ -34,6 +36,8 @@ public:
 
     void StartLean(const float InputRoll);
     void StopLean();
+
+    void Interact() override;
 
 	#pragma endregion
 
@@ -59,4 +63,7 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Body)
     USkeletalMeshComponent* Face;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
+    UFPSWeaponComponent* FPSWeaponComponent;
 };

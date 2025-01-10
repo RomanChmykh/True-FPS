@@ -3,6 +3,7 @@
 #include "Character/FPSCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/FPSWeaponComponent.h"
 #include "Animations/Character/FPSBaseCharacterAnimInstance.h"
 
 AFPSCharacter::AFPSCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer), FPCameraSocketName(TEXT("spine_05"))
@@ -28,7 +29,7 @@ AFPSCharacter::AFPSCharacter(const FObjectInitializer& ObjectInitializer) : Supe
     Face = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Face"));
     Face->SetupAttachment(GetMesh());
 
-
+    FPSWeaponComponent = CreateDefaultSubobject<UFPSWeaponComponent>("Weapon Component");
 }
 
 void AFPSCharacter::BeginPlay()
@@ -104,4 +105,9 @@ void AFPSCharacter::StopLean()
     if (!AnimInstance) return;
 
     AnimInstance->ResetRoll();
+}
+
+void AFPSCharacter::Interact()
+{
+
 }
