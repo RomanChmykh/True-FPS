@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Weapons/FPSBaseWeapon.h"
 #include "FPSWeaponComponent.generated.h"
 
-
-/**
+ /**
  * Weapon component for fps character
  */
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -18,8 +18,27 @@ class FPS_API UFPSWeaponComponent : public UActorComponent
 public:	
 	UFPSWeaponComponent();
 
+    void PickUpWeapon(AFPSBaseWeapon* Weapon);
+
+    FORCEINLINE AFPSBaseWeapon* GetCurrentWeapon() const { return CurrentWeapon; }
+
 protected:
 	
 	virtual void BeginPlay() override;
 
+	// Name of all weapon sockets
+    UPROPERTY(EditDefaultsOnly, Category = "Sockets")
+    FName PistolSocketName;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Sockets")
+    FName RifleSocketName;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Sockets")
+    FName ShotGunSocketName;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Sockets")
+    FName GrenadeLauncherSocketName;
+
+private:
+    AFPSBaseWeapon* CurrentWeapon;
 };

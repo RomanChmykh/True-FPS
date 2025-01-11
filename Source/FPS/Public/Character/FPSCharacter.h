@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Interfaces/FPSInteractebleInterface.h"
 #include "FPSCharacter.generated.h"
 
 class UCameraComponent;
@@ -12,7 +11,7 @@ class USkeletalMeshComponent;
 class UFPSWeaponComponent;
 
 UCLASS()
-class FPS_API AFPSCharacter : public ACharacter, public IFPSInteractebleInterface
+class FPS_API AFPSCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -37,9 +36,11 @@ public:
     void StartLean(const float InputRoll);
     void StopLean();
 
-    void Interact() override;
-
 	#pragma endregion
+
+    void Interact();
+
+    FORCEINLINE UFPSWeaponComponent* GetWeaponComponent() const { return FPSWeaponComponent; }
 
 protected:
 	virtual void BeginPlay() override;

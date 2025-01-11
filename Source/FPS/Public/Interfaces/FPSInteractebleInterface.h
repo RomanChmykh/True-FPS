@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include "Character/FPSCharacter.h"
 #include "FPSInteractebleInterface.generated.h"
 
 /*
@@ -23,5 +24,5 @@ class IFPSInteractebleInterface
     GENERATED_BODY()
 
 public:
-    virtual void Interact() = 0;
+    virtual void Interact(AFPSCharacter* const Character) = 0;
 };

@@ -3,8 +3,10 @@
 #include "Character/FPSCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/FPSWeaponComponent.h"
 #include "Animations/Character/FPSBaseCharacterAnimInstance.h"
+#include "Interfaces/FPSInteractebleInterface.h"
 
 AFPSCharacter::AFPSCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer), FPCameraSocketName(TEXT("spine_05"))
 {
@@ -109,5 +111,36 @@ void AFPSCharacter::StopLean()
 
 void AFPSCharacter::Interact()
 {
+    UCapsuleComponent* Capsule = GetCapsuleComponent();
+    if (!Capsule) return;
 
+    TArray<AActor*> OverlappingActors;
+    Capsule->GetOverlappingActors(OverlappingActors);
+
+    for (AActor* Actor : OverlappingActors)
+    {
+        if (!Actor) continue;
+
+        if (Actor->Implements<UFPSInteractebleInterface>())
+        {
+            AFPSBaseWeapon* Weapon = Cast<AFPSBaseWeapon>(Actor);
+            if (Weapon)
+            {
+                if (FPSWeaponComponent)
+                {
+                    FPSWeaponComponent->PickUpWeapon(Weapon);
+                }
+            }
+            else
+            {
+                IFPSInteractebleInterface* InteractObj = Cast<IFPSInteractebleInterface>(Actor);
+                if (InteractObj)
+                {
+                    InteractObj->Interact(this);
+                }
+            }
+
+            break;
+        }
+    }
 }

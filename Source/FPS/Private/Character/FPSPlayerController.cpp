@@ -52,6 +52,8 @@ void AFPSPlayerController::BeginPlay()
         EnhancedInputComponent->BindAction(FPSInputComponent->LeanAction, ETriggerEvent::Triggered, this, &AFPSPlayerController::StartLean);
         EnhancedInputComponent->BindAction(FPSInputComponent->LeanAction, ETriggerEvent::Completed, this, &AFPSPlayerController::StopLean);
 
+        /* Interact*/
+        EnhancedInputComponent->BindAction(FPSInputComponent->InteractAction, ETriggerEvent::Started, PlayerCharacter, &AFPSCharacter::Interact);
     }
 }
 
