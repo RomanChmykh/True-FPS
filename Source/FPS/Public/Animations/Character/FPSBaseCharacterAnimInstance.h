@@ -7,7 +7,8 @@
 #include "FPSBaseCharacterAnimInstance.generated.h"
 
 class AFPSCharacter;
-/**
+enum class EWeaponType : uint8;
+    /**
  * 
  */
 UCLASS()
@@ -22,6 +23,8 @@ public:
     void UpdateYaw(const double InputYaw);
     void UpdateRoll(const float InputRoll);
     void ResetRoll();
+
+    void UpdateWeaponType(EWeaponType NewWeaponType);
 
 protected:
     virtual void NativeUpdateAnimation(float DeltaSeconds) override;
@@ -54,6 +57,9 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     AFPSCharacter* PlayerCharacter;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    EWeaponType WeaponType;
 
     FTimerHandle ResetLeaningTimer; // timer for reset roll to default value after leaning
 };

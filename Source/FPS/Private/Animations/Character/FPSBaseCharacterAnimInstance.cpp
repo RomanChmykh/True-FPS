@@ -100,6 +100,11 @@ void UFPSBaseCharacterAnimInstance::ResetRoll()
     }
 }
 
+void UFPSBaseCharacterAnimInstance::UpdateWeaponType(EWeaponType NewWeaponType)
+{
+    WeaponType = NewWeaponType;
+}
+
 void UFPSBaseCharacterAnimInstance::UpdateIsFalling()
 {
     if (!PlayerCharacter) return;

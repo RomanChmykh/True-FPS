@@ -7,6 +7,8 @@
 #include "Weapons/FPSBaseWeapon.h"
 #include "FPSWeaponComponent.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnWeaponTypeChanged, EWeaponType);
+
  /**
  * Weapon component for fps character
  */
@@ -21,6 +23,8 @@ public:
     void PickUpWeapon(AFPSBaseWeapon* Weapon);
 
     FORCEINLINE AFPSBaseWeapon* GetCurrentWeapon() const { return CurrentWeapon; }
+
+    FOnWeaponTypeChanged OnWeaponTypeChanged;
 
 protected:
 	

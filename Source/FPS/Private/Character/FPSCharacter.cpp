@@ -37,6 +37,14 @@ AFPSCharacter::AFPSCharacter(const FObjectInitializer& ObjectInitializer) : Supe
 void AFPSCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+    USkeletalMeshComponent* SkeletalMesh = GetMesh();
+    if (!SkeletalMesh) return;
+
+    UFPSBaseCharacterAnimInstance* AnimInstance = Cast<UFPSBaseCharacterAnimInstance>(SkeletalMesh->GetAnimInstance());
+    if (!AnimInstance) return;
+
+    FPSWeaponComponent->OnWeaponTypeChanged.AddUObject(AnimInstance, &UFPSBaseCharacterAnimInstance::UpdateWeaponType);
 }
 
 void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

@@ -31,4 +31,6 @@ void UFPSWeaponComponent::PickUpWeapon(AFPSBaseWeapon* Weapon)
         Weapon->AttachToCharacter(Character);
         CurrentWeapon = Weapon;
     }
+
+    OnWeaponTypeChanged.Broadcast(Weapon->GetWeaponType());
 }
