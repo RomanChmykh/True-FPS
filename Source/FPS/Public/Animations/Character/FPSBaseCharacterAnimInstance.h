@@ -26,6 +26,8 @@ public:
 
     void UpdateWeaponType(EWeaponType NewWeaponType);
 
+    void SetIsAiming(const bool IsAiming);
+
 protected:
     virtual void NativeUpdateAnimation(float DeltaSeconds) override;
     virtual void NativeInitializeAnimation() override;
@@ -54,6 +56,9 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
     bool bIsFalling;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Aiming")
+    bool bIsAiming;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     AFPSCharacter* PlayerCharacter;

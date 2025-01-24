@@ -105,6 +105,11 @@ void UFPSBaseCharacterAnimInstance::UpdateWeaponType(EWeaponType NewWeaponType)
     WeaponType = NewWeaponType;
 }
 
+void UFPSBaseCharacterAnimInstance::SetIsAiming(const bool IsAiming)
+{
+    bIsAiming = IsAiming;
+}
+
 void UFPSBaseCharacterAnimInstance::UpdateIsFalling()
 {
     if (!PlayerCharacter) return;

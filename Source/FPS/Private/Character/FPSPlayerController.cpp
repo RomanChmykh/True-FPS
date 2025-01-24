@@ -54,6 +54,10 @@ void AFPSPlayerController::BeginPlay()
 
         /* Interact*/
         EnhancedInputComponent->BindAction(FPSInputComponent->InteractAction, ETriggerEvent::Started, PlayerCharacter, &AFPSCharacter::Interact);
+
+        /* Aiming*/
+        EnhancedInputComponent->BindAction(FPSInputComponent->AimAction, ETriggerEvent::Started, PlayerCharacter, &AFPSCharacter::StartAim);
+        EnhancedInputComponent->BindAction(FPSInputComponent->AimAction, ETriggerEvent::Completed, PlayerCharacter, &AFPSCharacter::StopAim);
     }
 }
 

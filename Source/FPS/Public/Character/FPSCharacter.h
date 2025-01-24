@@ -40,6 +40,9 @@ public:
 
     void Interact();
 
+    void StartAim();
+    void StopAim();
+
     FORCEINLINE UFPSWeaponComponent* GetWeaponComponent() const { return FPSWeaponComponent; }
 
 protected:

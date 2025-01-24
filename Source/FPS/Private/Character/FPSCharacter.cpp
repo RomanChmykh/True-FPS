@@ -152,3 +152,25 @@ void AFPSCharacter::Interact()
         }
     }
 }
+
+void AFPSCharacter::StartAim()
+{
+    USkeletalMeshComponent* const SkeletalMesh = GetMesh();
+    if (!SkeletalMesh) return;
+
+    UFPSBaseCharacterAnimInstance* AnimInstance = Cast<UFPSBaseCharacterAnimInstance>(SkeletalMesh->GetAnimInstance());
+    if (!AnimInstance) return;
+
+    AnimInstance->SetIsAiming(true);
+}
+
+void AFPSCharacter::StopAim() 
+{
+    USkeletalMeshComponent* const SkeletalMesh = GetMesh();
+    if (!SkeletalMesh) return;
+
+    UFPSBaseCharacterAnimInstance* AnimInstance = Cast<UFPSBaseCharacterAnimInstance>(SkeletalMesh->GetAnimInstance());
+    if (!AnimInstance) return;
+
+    AnimInstance->SetIsAiming(false);
+}

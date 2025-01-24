@@ -34,6 +34,9 @@ public:
     UPROPERTY(EditDefaultsOnly, Category = Input)
     UInputAction* InteractAction;
 
+    UPROPERTY(EditDefaultsOnly, Category = Input)
+    UInputAction* AimAction;
+
 protected:
 	virtual void BeginPlay() override;	
 };
