@@ -5,6 +5,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/FPSWeaponComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Animations/Character/FPSBaseCharacterAnimInstance.h"
 #include "Interfaces/FPSInteractebleInterface.h"
 
@@ -71,6 +72,13 @@ void AFPSCharacter::Move(const FVector2D& Direction)
         AddMovementInput(ForwardDirection, Direction.Y);
         AddMovementInput(RightDirection, Direction.X);
     }
+
+    bIsWalk = true;
+}
+
+void AFPSCharacter::StopMove()
+{
+    bIsWalk = false;
 }
 
 void AFPSCharacter::Look(const FVector2D& Direction) 
@@ -117,6 +125,26 @@ void AFPSCharacter::StopLean()
     AnimInstance->ResetRoll();
 }
 
+void AFPSCharacter::StartSprint()
+{
+    if (!bIsWalk || bIsAiming) return;
+
+    UCharacterMovementComponent* const MovementComp = GetCharacterMovement();
+    if (!MovementComp) return;
+
+    MovementComp->MaxWalkSpeed = 600.0f;
+    bIsSprint = true;
+}
+
+void AFPSCharacter::StopSprint()
+{
+    UCharacterMovementComponent* const MovementComp = GetCharacterMovement();
+    if (!MovementComp) return;
+
+    MovementComp->MaxWalkSpeed = 400.0f;
+    bIsSprint = false;
+}
+
 void AFPSCharacter::Interact()
 {
     UCapsuleComponent* Capsule = GetCapsuleComponent();
@@ -155,13 +183,16 @@ void AFPSCharacter::Interact()
 
 void AFPSCharacter::StartAim()
 {
+    if (bIsSprint) return;
+
     USkeletalMeshComponent* const SkeletalMesh = GetMesh();
     if (!SkeletalMesh) return;
 
     UFPSBaseCharacterAnimInstance* AnimInstance = Cast<UFPSBaseCharacterAnimInstance>(SkeletalMesh->GetAnimInstance());
     if (!AnimInstance) return;
 
-    AnimInstance->SetIsAiming(true);
+    bIsAiming = true;
+    AnimInstance->SetIsAiming(bIsAiming);
 }
 
 void AFPSCharacter::StopAim() 
@@ -172,5 +203,6 @@ void AFPSCharacter::StopAim()
     UFPSBaseCharacterAnimInstance* AnimInstance = Cast<UFPSBaseCharacterAnimInstance>(SkeletalMesh->GetAnimInstance());
     if (!AnimInstance) return;
 
-    AnimInstance->SetIsAiming(false);
+    bIsAiming = false;
+    AnimInstance->SetIsAiming(bIsAiming);
 }

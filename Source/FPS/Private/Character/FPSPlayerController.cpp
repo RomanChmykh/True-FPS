@@ -37,6 +37,7 @@ void AFPSPlayerController::BeginPlay()
     {
         /* Moving */
         EnhancedInputComponent->BindAction(FPSInputComponent->MoveAction, ETriggerEvent::Triggered, this, &AFPSPlayerController::Move);
+        EnhancedInputComponent->BindAction(FPSInputComponent->MoveAction, ETriggerEvent::Completed, this, &AFPSPlayerController::StopMove);
 
         /* Looking */
         EnhancedInputComponent->BindAction(FPSInputComponent->LookAction, ETriggerEvent::Triggered, this, &AFPSPlayerController::Look);
@@ -58,6 +59,10 @@ void AFPSPlayerController::BeginPlay()
         /* Aiming*/
         EnhancedInputComponent->BindAction(FPSInputComponent->AimAction, ETriggerEvent::Started, PlayerCharacter, &AFPSCharacter::StartAim);
         EnhancedInputComponent->BindAction(FPSInputComponent->AimAction, ETriggerEvent::Completed, PlayerCharacter, &AFPSCharacter::StopAim);
+
+        /* Sprinting*/
+        EnhancedInputComponent->BindAction(FPSInputComponent->SprintAction, ETriggerEvent::Started, PlayerCharacter, &AFPSCharacter::StartSprint);
+        EnhancedInputComponent->BindAction(FPSInputComponent->SprintAction, ETriggerEvent::Completed, PlayerCharacter, &AFPSCharacter::StopSprint);
     }
 }
 
@@ -67,6 +72,13 @@ void AFPSPlayerController::Move(const FInputActionValue& Value)
 
     FVector2D MovementVector = Value.Get<FVector2D>();
     PlayerCharacter->Move(MovementVector);
+}
+
+void AFPSPlayerController::StopMove()
+{
+    AFPSCharacter* const PlayerCharacter = GetPawn<AFPSCharacter>();
+
+    PlayerCharacter->StopMove();
 }
 
 void AFPSPlayerController::Look(const FInputActionValue& Value) 

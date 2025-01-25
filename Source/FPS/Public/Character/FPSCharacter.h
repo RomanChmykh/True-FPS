@@ -24,6 +24,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Movement", meta = (ToolTip = "Moves the character in the specified direction. Direction should be a normalized vector."))
     void Move(const FVector2D& Direction);
+    void StopMove();
 
     void Look(const FVector2D& Direction);
 
@@ -35,6 +36,9 @@ public:
 
     void StartLean(const float InputRoll);
     void StopLean();
+
+    void StartSprint();
+    void StopSprint();
 
 	#pragma endregion
 
@@ -70,4 +74,9 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
     UFPSWeaponComponent* FPSWeaponComponent;
+
+private:
+    bool bIsWalk;
+    bool bIsSprint;
+    bool bIsAiming;
 };
