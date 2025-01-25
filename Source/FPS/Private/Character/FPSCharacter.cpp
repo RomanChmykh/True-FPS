@@ -127,7 +127,9 @@ void AFPSCharacter::StopLean()
 
 void AFPSCharacter::StartSprint()
 {
-    if (!bIsWalk || bIsAiming) return;
+    if (!bIsWalk) return;
+
+    if (bIsAiming) StopAim();
 
     UCharacterMovementComponent* const MovementComp = GetCharacterMovement();
     if (!MovementComp) return;
@@ -183,7 +185,7 @@ void AFPSCharacter::Interact()
 
 void AFPSCharacter::StartAim()
 {
-    if (bIsSprint) return;
+    if (bIsSprint) StopSprint();
 
     USkeletalMeshComponent* const SkeletalMesh = GetMesh();
     if (!SkeletalMesh) return;
