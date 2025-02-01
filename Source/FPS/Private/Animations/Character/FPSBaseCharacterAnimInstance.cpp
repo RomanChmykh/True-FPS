@@ -11,7 +11,7 @@
 
 
 UFPSBaseCharacterAnimInstance::UFPSBaseCharacterAnimInstance(const FObjectInitializer& ObjectInitializer)
-    : Speed(0.0f), Direction(0.0f), Pitch(0.0f), Yaw(0.0f), bIsFalling(false)
+    : Speed(0.0f), Direction(0.0f), AnimationPitch(0.0f), AnimationYaw(0.0f), bIsFalling(false)
 {
 }
 
@@ -50,19 +50,19 @@ float UFPSBaseCharacterAnimInstance::GetMovementDirection() const
     return CrossProduct.IsZero() ? Degrees : Degrees * FMath::Sign(CrossProduct.Z);
 }
 
-void UFPSBaseCharacterAnimInstance::UpdatePitch(const double InputPitch)
+void UFPSBaseCharacterAnimInstance::UpdateAnimationPitch(const double InputPitch)
 {
-    float NewPitch = Pitch + InputPitch;
-    Pitch = FMath::Clamp(NewPitch, -18.0f, 18.0f); // -18 and 18 its clamp for 5 bones that in summary clamp pitch eagle from -90 to 90
+    float NewPitch = AnimationPitch + InputPitch;
+    AnimationPitch = FMath::Clamp(NewPitch, -18.0f, 18.0f);  // -18 and 18 its clamp for 5 bones that in summary clamp pitch eagle from -90 to 90
 }
 
-void UFPSBaseCharacterAnimInstance::UpdateYaw(const double InputYaw) 
+void UFPSBaseCharacterAnimInstance::UpdateAnimationYaw(const double InputYaw) 
 {
-    float NewYaw = (InputYaw * 0.6f) + Yaw;
-    Yaw = FMath::Clamp(NewYaw, -10.0f, 10.0f);
+    float NewYaw = (InputYaw * 0.6f) + AnimationYaw;
+    AnimationYaw = FMath::Clamp(NewYaw, -10.0f, 10.0f);
 }
 
-void UFPSBaseCharacterAnimInstance::UpdateRoll(const float InputRoll) 
+void UFPSBaseCharacterAnimInstance::UpdateAnimationRoll(const float InputRoll) 
 {
     UWorld* World = GetOwningActor()->GetWorld();  
     if (!World) return;
@@ -74,25 +74,23 @@ void UFPSBaseCharacterAnimInstance::UpdateRoll(const float InputRoll)
 
     const float TargetRoll = FMath::GetMappedRangeValueClamped(FVector2D(-1.0f, 1.0f), FVector2D(-10.0f, 10.0f), InputRoll);
 
-    Roll = FMath::FInterpTo(Roll, TargetRoll, World->GetDeltaSeconds(), 10.0f);
+    AnimationRoll = FMath::FInterpTo(AnimationRoll, TargetRoll, World->GetDeltaSeconds(), 10.0f);
 }
 
-void UFPSBaseCharacterAnimInstance::ResetRoll() 
+void UFPSBaseCharacterAnimInstance::ResetAnimationRoll() 
 {
-    if (UWorld* World = GetOwningActor()->GetWorld())  // ????????? ???? ????? ??????
+    if (UWorld* World = GetOwningActor()->GetWorld())
     {
-        // ?????????? ?????? ? ????????? ????????
         World->GetTimerManager().SetTimer(
             ResetLeaningTimer,
             [this, World]()
             {
-                // ?????? ???????? Roll ?? 0
-                Roll = FMath::FInterpTo(Roll, 0.0f, World->GetDeltaSeconds(), 10.0f);
+                AnimationRoll = FMath::FInterpTo(AnimationRoll, 0.0f, World->GetDeltaSeconds(), 10.0f);
 
                 // ???? Roll ????????? ???????? ?? 0, ????????? ??????
-                if (FMath::IsNearlyZero(Roll, 0.01f))
+                if (FMath::IsNearlyZero(AnimationRoll, 0.01f))
                 {
-                    Roll = 0.0f;
+                    AnimationRoll = 0.0f;
                     World->GetTimerManager().ClearTimer(ResetLeaningTimer);
                 }
             },
@@ -108,6 +106,12 @@ void UFPSBaseCharacterAnimInstance::UpdateWeaponType(EWeaponType NewWeaponType)
 void UFPSBaseCharacterAnimInstance::SetIsAiming(const bool IsAiming)
 {
     bIsAiming = IsAiming;
+}
+
+void UFPSBaseCharacterAnimInstance::SetIsTurnRightLeft(const bool IsRight, const bool IsLeft)
+{
+    bIsTurnRight = IsRight;
+    bIsTurnLeft = IsLeft;
 }
 
 void UFPSBaseCharacterAnimInstance::UpdateIsFalling()

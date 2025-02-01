@@ -111,7 +111,7 @@ void AFPSCharacter::StartLean(const float InputRoll)
     UFPSBaseCharacterAnimInstance* AnimInstance = Cast<UFPSBaseCharacterAnimInstance>(SkeletalMesh->GetAnimInstance());
     if (!AnimInstance) return;
 
-    AnimInstance->UpdateRoll(InputRoll);
+    AnimInstance->UpdateAnimationRoll(InputRoll);
 }
 
 void AFPSCharacter::StopLean() 
@@ -122,7 +122,7 @@ void AFPSCharacter::StopLean()
     UFPSBaseCharacterAnimInstance* AnimInstance = Cast<UFPSBaseCharacterAnimInstance>(SkeletalMesh->GetAnimInstance());
     if (!AnimInstance) return;
 
-    AnimInstance->ResetRoll();
+    AnimInstance->ResetAnimationRoll();
 }
 
 void AFPSCharacter::StartSprint()
@@ -207,4 +207,36 @@ void AFPSCharacter::StopAim()
 
     bIsAiming = false;
     AnimInstance->SetIsAiming(bIsAiming);
+}
+
+void AFPSCharacter::UpdateAnimationPitchAndYaw(const FVector2D& Value) 
+{
+    USkeletalMeshComponent* const SkeletalMesh = GetMesh();
+    if (!SkeletalMesh) return;
+
+    UFPSBaseCharacterAnimInstance* AnimInstance = Cast<UFPSBaseCharacterAnimInstance>(SkeletalMesh->GetAnimInstance());
+    if (!AnimInstance) return;
+
+    AnimInstance->UpdateAnimationPitch(Value.Y * 0.5);
+    AnimInstance->UpdateAnimationYaw(Value.X);
+}
+
+void AFPSCharacter::CalculateCharacterTurnRightLeft(const FVector2D& Value) 
+{
+    USkeletalMeshComponent* const SkeletalMesh = GetMesh();
+    if (!SkeletalMesh) return;
+
+    UFPSBaseCharacterAnimInstance* AnimInstance = Cast<UFPSBaseCharacterAnimInstance>(SkeletalMesh->GetAnimInstance());
+    if (!AnimInstance) return;
+
+    float TurnAxis = Value.X;
+    float const Speed = GetVelocity().Size();
+
+    if (Speed) return;
+
+    if (TurnAxis > 0.1f) AnimInstance->SetIsTurnRightLeft(true, false);
+    else if (TurnAxis < -0.1f)
+        AnimInstance->SetIsTurnRightLeft(false, true);
+    else
+        AnimInstance->SetIsTurnRightLeft(false, false);
 }

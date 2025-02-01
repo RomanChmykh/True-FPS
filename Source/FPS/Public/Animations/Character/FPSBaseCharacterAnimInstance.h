@@ -19,14 +19,15 @@ class FPS_API UFPSBaseCharacterAnimInstance : public UAnimInstance
 public:
     UFPSBaseCharacterAnimInstance(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-    void UpdatePitch(const double InputPitch);
-    void UpdateYaw(const double InputYaw);
-    void UpdateRoll(const float InputRoll);
-    void ResetRoll();
+    void UpdateAnimationPitch(const double InputPitch);
+    void UpdateAnimationYaw(const double InputYaw);
+    void UpdateAnimationRoll(const float InputRoll);
+    void ResetAnimationRoll();
 
     void UpdateWeaponType(EWeaponType NewWeaponType);
 
     void SetIsAiming(const bool IsAiming);
+    void SetIsTurnRightLeft(const bool IsRight, const bool IsLeft);
 
 protected:
     virtual void NativeUpdateAnimation(float DeltaSeconds) override;
@@ -46,16 +47,22 @@ protected:
     float Direction;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
-    float Pitch;
+    float AnimationPitch;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
-    float Yaw;
+    float AnimationYaw;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
-    float Roll;
+    float AnimationRoll;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
     bool bIsFalling;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
+    bool bIsTurnRight;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
+    bool bIsTurnLeft;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Aiming")
     bool bIsAiming;

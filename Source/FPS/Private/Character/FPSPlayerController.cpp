@@ -95,15 +95,10 @@ void AFPSPlayerController::UpdatePitchAndYaw(const FInputActionValue& Value)
     AFPSCharacter* const PlayerCharacter = GetPawn<AFPSCharacter>();
     if (!PlayerCharacter) return;
 
-    USkeletalMeshComponent* const SkeletalMesh = PlayerCharacter->GetMesh();
-    if (!SkeletalMesh) return;
-
-    UFPSBaseCharacterAnimInstance* AnimInstance = Cast<UFPSBaseCharacterAnimInstance>(SkeletalMesh->GetAnimInstance());
-    if (!AnimInstance) return;
-
     FVector2D LookAxisVector = Value.Get<FVector2D>();
-    AnimInstance->UpdatePitch(LookAxisVector.Y * 0.5);
-    AnimInstance->UpdateYaw(LookAxisVector.X);
+
+    PlayerCharacter->UpdateAnimationPitchAndYaw(LookAxisVector);
+    PlayerCharacter->CalculateCharacterTurnRightLeft(LookAxisVector);
 }
 
 void AFPSPlayerController::StartLean(const FInputActionValue& Value) 

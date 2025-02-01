@@ -47,6 +47,13 @@ public:
     void StartAim();
     void StopAim();
 
+    #pragma region Moving
+
+    void UpdateAnimationPitchAndYaw(const FVector2D& Value);
+    void CalculateCharacterTurnRightLeft(const FVector2D& Value);
+
+    #pragma endregion
+
     FORCEINLINE UFPSWeaponComponent* GetWeaponComponent() const { return FPSWeaponComponent; }
 
 protected:
