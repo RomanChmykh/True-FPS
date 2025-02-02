@@ -24,6 +24,8 @@ public:
 
     void Realod(AFPSCharacter* const Character);
 
+    void SetIsReload(bool const IsReload);
+
     FORCEINLINE AFPSBaseWeapon* GetCurrentWeapon() const { return CurrentWeapon; }
 
     FOnWeaponTypeChanged OnWeaponTypeChanged;
@@ -47,4 +49,6 @@ protected:
 
 private:
     AFPSBaseWeapon* CurrentWeapon;
+
+    bool bIsReload;
 };

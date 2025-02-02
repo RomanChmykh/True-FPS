@@ -1,6 +1,7 @@
 // First Person Shooter, all rights reserved.
 
 #include "Weapons/FPSBaseWeapon.h"
+#include "Components/FPSWeaponComponent.h"
 
 AFPSBaseWeapon::AFPSBaseWeapon(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer), MagazineSocketName("mag")
 {
@@ -41,6 +42,20 @@ void AFPSBaseWeapon::Realod(AFPSCharacter* const Character)
 
     ChatacterAnimInstance->Montage_Play(CharacterReloadAnimMontage);
     MagazineAnimInstance->Montage_Play(MagazineReloadAnimMontage);
+
+    FOnMontageEnded EndDelegate;
+    EndDelegate.BindLambda(
+        [Character](UAnimMontage* Montage, bool bInterrupted)
+        {
+            if (!bInterrupted && Character)
+            {
+                UFPSWeaponComponent* WeaponComponent = Character->FindComponentByClass<UFPSWeaponComponent>();
+
+                if (WeaponComponent) WeaponComponent->SetIsReload(false);
+            }
+        });
+
+    ChatacterAnimInstance->Montage_SetEndDelegate(EndDelegate, CharacterReloadAnimMontage);
 }
 
 void AFPSBaseWeapon::AttachToCharacter(AFPSCharacter* const Character)

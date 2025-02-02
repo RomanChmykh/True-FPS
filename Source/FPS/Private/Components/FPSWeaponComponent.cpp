@@ -39,5 +39,14 @@ void UFPSWeaponComponent::Realod(AFPSCharacter* const Character)
 {
     if (!CurrentWeapon) return;
 
+    if (bIsReload) return;
+
+    bIsReload = true;
+
     CurrentWeapon->Realod(Character);
+}
+
+void UFPSWeaponComponent::SetIsReload(bool const IsReload) 
+{
+    bIsReload = IsReload;
 }
