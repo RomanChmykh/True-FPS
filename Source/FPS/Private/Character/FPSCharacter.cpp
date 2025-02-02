@@ -89,6 +89,11 @@ void AFPSCharacter::Look(const FVector2D& Direction)
     AddControllerPitchInput(Direction.Y);
 }
 
+void AFPSCharacter::StopLook()
+{
+    CalculateCharacterTurnRightLeft(FVector2D(0.0f, 0.0f));
+}
+
 void AFPSCharacter::StartCrouch() {}
 
 void AFPSCharacter::StopCrouch() {}
@@ -232,7 +237,11 @@ void AFPSCharacter::CalculateCharacterTurnRightLeft(const FVector2D& Value)
     float TurnAxis = Value.X;
     float const Speed = GetVelocity().Size();
 
-    if (Speed) return;
+    if (Speed > 0.01f)
+    {
+        AnimInstance->SetIsTurnRightLeft(false, false);
+        return; 
+    }
 
     if (TurnAxis > 0.1f) AnimInstance->SetIsTurnRightLeft(true, false);
     else if (TurnAxis < -0.1f)

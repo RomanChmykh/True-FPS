@@ -38,6 +38,7 @@ private:
     void StopMove();
 
     void Look(const FInputActionValue& Value);
+    void StopLook(const FInputActionValue& Value);
 
     void UpdatePitchAndYaw(const FInputActionValue& Value);
 

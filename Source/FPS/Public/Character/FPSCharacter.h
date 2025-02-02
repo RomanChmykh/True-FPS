@@ -27,6 +27,7 @@ public:
     void StopMove();
 
     void Look(const FVector2D& Direction);
+    void StopLook();
 
     void StartCrouch();
     void StopCrouch();
