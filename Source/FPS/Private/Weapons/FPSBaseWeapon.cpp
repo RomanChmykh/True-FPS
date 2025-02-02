@@ -2,19 +2,25 @@
 
 #include "Weapons/FPSBaseWeapon.h"
 
-AFPSBaseWeapon::AFPSBaseWeapon(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+AFPSBaseWeapon::AFPSBaseWeapon(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer), MagazineSocketName("mag")
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMeshComponent"));
-    SkeletalMeshComponent->SetupAttachment(RootComponent);
-    SkeletalMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-    SkeletalMeshComponent->SetCollisionResponseToAllChannels(ECR_Block);
-    SkeletalMeshComponent->SetSimulatePhysics(true);
+	Body = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Body"));
+    SetRootComponent(Body);
+    Body->SetSimulatePhysics(true);
+    Body->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+    Body->SetCollisionResponseToAllChannels(ECR_Block);
+
+    Magazine = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Magazine"));
+    Magazine->SetupAttachment(Body, MagazineSocketName);
+    Magazine->SetSimulatePhysics(false);
+    Magazine->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
     CollisionInteractionComponent = CreateDefaultSubobject<USphereComponent>("Collision Interaction");
-    CollisionInteractionComponent->SetupAttachment(SkeletalMeshComponent);
+    CollisionInteractionComponent->SetupAttachment(Body);
     CollisionInteractionComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+    CollisionInteractionComponent->SetSimulatePhysics(false);
 
     float CollisionSphereRadius = 100.0f;
     CollisionInteractionComponent->SetSphereRadius(CollisionSphereRadius);
@@ -23,6 +29,18 @@ AFPSBaseWeapon::AFPSBaseWeapon(const FObjectInitializer& ObjectInitializer) : Su
 void AFPSBaseWeapon::Interact(AFPSCharacter* const Character) 
 {
 
+}
+
+void AFPSBaseWeapon::Realod(AFPSCharacter* const Character) 
+{
+    UAnimInstance* const ChatacterAnimInstance = Character->GetMesh()->GetAnimInstance();
+    if (!ChatacterAnimInstance) return;
+
+    UAnimInstance* const MagazineAnimInstance = Magazine->GetAnimInstance();
+    if (!MagazineAnimInstance) return;
+
+    ChatacterAnimInstance->Montage_Play(CharacterReloadAnimMontage);
+    MagazineAnimInstance->Montage_Play(MagazineReloadAnimMontage);
 }
 
 void AFPSBaseWeapon::AttachToCharacter(AFPSCharacter* const Character)
@@ -42,8 +60,8 @@ void AFPSBaseWeapon::AttachToCharacter(AFPSCharacter* const Character)
         default: SocketName = FName("DefaultSocket"); break;
     }
 
-    SkeletalMeshComponent->SetSimulatePhysics(false);
-    SkeletalMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    Body->SetSimulatePhysics(false);
+    Body->SetCollisionEnabled(ECollisionEnabled::NoCollision);
     CollisionInteractionComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
     FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, false);
@@ -56,12 +74,13 @@ void AFPSBaseWeapon::DetachFromCharacter(AFPSCharacter* const Character)
 
     DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
-    SkeletalMeshComponent->SetSimulatePhysics(true);
-    SkeletalMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+    Body->SetSimulatePhysics(true);
+    Body->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
     CollisionInteractionComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 }
 
 void AFPSBaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
+    CollisionInteractionComponent->AttachToComponent(Body, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 }

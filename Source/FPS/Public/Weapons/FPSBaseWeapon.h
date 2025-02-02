@@ -10,6 +10,8 @@
 #include "Character/FPSCharacter.h"
 #include "FPSBaseWeapon.generated.h"
 
+class UAnimMontage;
+
 UENUM(BlueprintType)
 enum class EWeaponType : uint8
 {
@@ -29,6 +31,8 @@ public:
 	AFPSBaseWeapon(const FObjectInitializer& ObjectInitializer);
 
 	virtual void Interact(AFPSCharacter* const Character) override;
+
+    void Realod(AFPSCharacter* const Character);
     
     void AttachToCharacter(AFPSCharacter* const Character);
     void DetachFromCharacter(AFPSCharacter* const Character);
@@ -38,12 +42,24 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "SkeletalMeshComponent")
-    USkeletalMeshComponent* SkeletalMeshComponent;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "SkeletalMesh")
+    USkeletalMeshComponent* Body;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "SkeletalMesh")
+    USkeletalMeshComponent* Magazine;
 
     UPROPERTY(EditDefaultsOnly, Category = "Collision Interaction")
     USphereComponent* CollisionInteractionComponent;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon Parameters")
     EWeaponType WeaponType;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Animations")
+    UAnimMontage* CharacterReloadAnimMontage;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Animations")
+    UAnimMontage* MagazineReloadAnimMontage;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Sockets")
+    FName MagazineSocketName;
 };

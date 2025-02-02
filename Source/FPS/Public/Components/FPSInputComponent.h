@@ -40,6 +40,9 @@ public:
     UPROPERTY(EditDefaultsOnly, Category = Input)
     UInputAction* SprintAction;
 
+    UPROPERTY(EditDefaultsOnly, Category = Input)
+    UInputAction* RealodAction;
+
 protected:
 	virtual void BeginPlay() override;	
 };

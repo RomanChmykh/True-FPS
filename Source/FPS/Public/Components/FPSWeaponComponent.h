@@ -22,6 +22,8 @@ public:
 
     void PickUpWeapon(AFPSBaseWeapon* Weapon);
 
+    void Realod(AFPSCharacter* const Character);
+
     FORCEINLINE AFPSBaseWeapon* GetCurrentWeapon() const { return CurrentWeapon; }
 
     FOnWeaponTypeChanged OnWeaponTypeChanged;

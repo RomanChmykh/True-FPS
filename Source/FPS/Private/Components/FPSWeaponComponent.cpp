@@ -34,3 +34,10 @@ void UFPSWeaponComponent::PickUpWeapon(AFPSBaseWeapon* Weapon)
 
     OnWeaponTypeChanged.Broadcast(Weapon->GetWeaponType());
 }
+
+void UFPSWeaponComponent::Realod(AFPSCharacter* const Character)
+{
+    if (!CurrentWeapon) return;
+
+    CurrentWeapon->Realod(Character);
+}

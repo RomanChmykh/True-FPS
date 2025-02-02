@@ -64,6 +64,9 @@ void AFPSPlayerController::BeginPlay()
         /* Sprinting*/
         EnhancedInputComponent->BindAction(FPSInputComponent->SprintAction, ETriggerEvent::Started, PlayerCharacter, &AFPSCharacter::StartSprint);
         EnhancedInputComponent->BindAction(FPSInputComponent->SprintAction, ETriggerEvent::Completed, PlayerCharacter, &AFPSCharacter::StopSprint);
+
+        /* Realoding*/
+        EnhancedInputComponent->BindAction(FPSInputComponent->RealodAction, ETriggerEvent::Started, PlayerCharacter, &AFPSCharacter::Realod);
     }
 }
 

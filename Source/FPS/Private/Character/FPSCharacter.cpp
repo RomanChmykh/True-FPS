@@ -214,6 +214,13 @@ void AFPSCharacter::StopAim()
     AnimInstance->SetIsAiming(bIsAiming);
 }
 
+void AFPSCharacter::Realod()
+{
+    if (!FPSWeaponComponent) return;
+
+    FPSWeaponComponent->Realod(this);
+}
+
 void AFPSCharacter::UpdateAnimationPitchAndYaw(const FVector2D& Value) 
 {
     USkeletalMeshComponent* const SkeletalMesh = GetMesh();
