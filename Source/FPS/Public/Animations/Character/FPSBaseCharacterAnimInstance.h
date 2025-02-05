@@ -25,6 +25,7 @@ public:
     void ResetAnimationRoll();
 
     void UpdateWeaponType(EWeaponType NewWeaponType);
+    void UpdateCurrentWeaponLHIK(FTransform const LHIKTransform);
 
     void SetIsAiming(const bool IsAiming);
     void SetIsTurnRightLeft(const bool IsRight, const bool IsLeft);
@@ -67,11 +68,13 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Aiming")
     bool bIsAiming;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Hand Sway")
+    FTransform CurrentWeaponLHIKTransform;  // current weapon left hand IK transform
+
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     AFPSCharacter* PlayerCharacter;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     EWeaponType WeaponType;
-
     FTimerHandle ResetLeaningTimer; // timer for reset roll to default value after leaning
 };

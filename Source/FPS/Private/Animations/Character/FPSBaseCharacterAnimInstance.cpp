@@ -8,7 +8,7 @@
 #include "Character/FPSCharacter.h"
 #include "Character/FPSPlayerController.h"
 #include "Components/FPSInputComponent.h"
-
+#include "Components/FPSWeaponComponent.h"
 
 UFPSBaseCharacterAnimInstance::UFPSBaseCharacterAnimInstance(const FObjectInitializer& ObjectInitializer)
     : Speed(0.0f), Direction(0.0f), AnimationPitch(0.0f), AnimationYaw(0.0f), bIsFalling(false)
@@ -22,6 +22,14 @@ void UFPSBaseCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
     Direction = GetMovementDirection();
     UpdateIsFalling();
     UpdateSpeed();
+
+    AFPSCharacter* const OwningActor = Cast<AFPSCharacter>(GetOwningActor());
+    if (!OwningActor) return;
+
+    UFPSWeaponComponent* FPSWeaponComponent = OwningActor->FindComponentByClass<UFPSWeaponComponent>();
+    if (!FPSWeaponComponent) return;
+
+    CurrentWeaponLHIKTransform = FPSWeaponComponent->CalculateCurrentWeaponLHIKTransform();
 }
 
 void UFPSBaseCharacterAnimInstance::NativeInitializeAnimation()
@@ -29,7 +37,6 @@ void UFPSBaseCharacterAnimInstance::NativeInitializeAnimation()
     Super::NativeInitializeAnimation();
 
     AFPSCharacter* const OwningActor = Cast<AFPSCharacter>(GetOwningActor());
-
     if (!OwningActor) return;
 
     PlayerCharacter = OwningActor;
@@ -101,6 +108,11 @@ void UFPSBaseCharacterAnimInstance::ResetAnimationRoll()
 void UFPSBaseCharacterAnimInstance::UpdateWeaponType(EWeaponType NewWeaponType)
 {
     WeaponType = NewWeaponType;
+}
+
+void UFPSBaseCharacterAnimInstance::UpdateCurrentWeaponLHIK(FTransform const LHIKTransform) 
+{
+    CurrentWeaponLHIKTransform = LHIKTransform;
 }
 
 void UFPSBaseCharacterAnimInstance::SetIsAiming(const bool IsAiming)

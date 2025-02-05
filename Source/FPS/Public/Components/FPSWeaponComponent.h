@@ -8,6 +8,7 @@
 #include "FPSWeaponComponent.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnWeaponTypeChanged, EWeaponType);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnCurrentWeaponLHIKChanged, FTransform);
 
  /**
  * Weapon component for fps character
@@ -26,12 +27,14 @@ public:
 
     void SetIsReload(bool const IsReload);
 
+    FTransform CalculateCurrentWeaponLHIKTransform() const;
+
     FORCEINLINE AFPSBaseWeapon* GetCurrentWeapon() const { return CurrentWeapon; }
 
     FOnWeaponTypeChanged OnWeaponTypeChanged;
+    FOnCurrentWeaponLHIKChanged OnCurrentWeaponLHIKChanged;
 
 protected:
-	
 	virtual void BeginPlay() override;
 
 	// Name of all weapon sockets

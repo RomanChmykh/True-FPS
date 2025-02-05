@@ -46,6 +46,7 @@ void AFPSCharacter::BeginPlay()
     if (!AnimInstance) return;
 
     FPSWeaponComponent->OnWeaponTypeChanged.AddUObject(AnimInstance, &UFPSBaseCharacterAnimInstance::UpdateWeaponType);
+    FPSWeaponComponent->OnCurrentWeaponLHIKChanged.AddUObject(AnimInstance, &UFPSBaseCharacterAnimInstance::UpdateCurrentWeaponLHIK);
 }
 
 void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
