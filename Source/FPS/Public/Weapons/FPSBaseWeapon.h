@@ -32,6 +32,9 @@ public:
 
 	virtual void Interact(AFPSCharacter* const Character) override;
 
+    virtual void StartFire(AFPSCharacter* const Character);
+    virtual void StopFire(AFPSCharacter* const Character);
+
     void Realod(AFPSCharacter* const Character);
     
     void AttachToCharacter(AFPSCharacter* const Character);

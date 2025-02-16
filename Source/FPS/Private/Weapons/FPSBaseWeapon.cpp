@@ -99,3 +99,13 @@ void AFPSBaseWeapon::BeginPlay()
 	Super::BeginPlay();
     CollisionInteractionComponent->AttachToComponent(Body, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 }
+
+void AFPSBaseWeapon::StartFire(AFPSCharacter* const Character)
+{
+
+}
+
+void AFPSBaseWeapon::StopFire(AFPSCharacter* const Character) 
+{
+
+}

@@ -189,6 +189,20 @@ void AFPSCharacter::Interact()
     }
 }
 
+void AFPSCharacter::StartFire()
+{
+    if (!FPSWeaponComponent) return;
+
+    FPSWeaponComponent->StartFire(this);
+}
+
+void AFPSCharacter::StopFire() 
+{
+    if (!FPSWeaponComponent) return;
+
+    FPSWeaponComponent->StopFire(this);
+}
+
 void AFPSCharacter::StartAim()
 {
     if (bIsSprint) StopSprint();

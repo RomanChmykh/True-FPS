@@ -43,6 +43,9 @@ public:
     UPROPERTY(EditDefaultsOnly, Category = Input)
     UInputAction* RealodAction;
 
+    UPROPERTY(EditDefaultsOnly, Category = Input)
+    UInputAction* FireAction;
+
 protected:
 	virtual void BeginPlay() override;	
 };

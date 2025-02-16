@@ -45,6 +45,9 @@ public:
 
     void Interact();
 
+    void StartFire();
+    void StopFire();
+
     void StartAim();
     void StopAim();
 

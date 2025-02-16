@@ -36,6 +36,20 @@ void UFPSWeaponComponent::PickUpWeapon(AFPSBaseWeapon* Weapon)
     OnCurrentWeaponLHIKChanged.Broadcast(CalculateCurrentWeaponLHIKTransform());
 }
 
+void UFPSWeaponComponent::StartFire(AFPSCharacter* const Character)
+{
+    if (!CurrentWeapon) return;
+
+    CurrentWeapon->StartFire(Character);
+}
+
+void UFPSWeaponComponent::StopFire(AFPSCharacter* const Character)
+{
+    if (!CurrentWeapon) return;
+
+    CurrentWeapon->StopFire(Character);
+}
+
 void UFPSWeaponComponent::Realod(AFPSCharacter* const Character)
 {
     if (!CurrentWeapon) return;

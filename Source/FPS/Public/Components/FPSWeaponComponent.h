@@ -23,6 +23,9 @@ public:
 
     void PickUpWeapon(AFPSBaseWeapon* Weapon);
 
+    void StartFire(AFPSCharacter* const Character);
+    void StopFire(AFPSCharacter* const Character);
+
     void Realod(AFPSCharacter* const Character);
 
     void SetIsReload(bool const IsReload);
