@@ -100,6 +100,14 @@ void AFPSBaseWeapon::BeginPlay()
     CollisionInteractionComponent->AttachToComponent(Body, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 }
 
+UAnimMontage* AFPSBaseWeapon::GetRandomAnimMontage(const TArray<UAnimMontage*>& AnimMontages) const 
+{
+    if (AnimMontages.Num() == 0) return nullptr;
+
+    int32 RandomIndex = FMath::RandRange(0, AnimMontages.Num() - 1);
+    return AnimMontages[RandomIndex];
+}
+
 void AFPSBaseWeapon::StartFire(AFPSCharacter* const Character)
 {
 

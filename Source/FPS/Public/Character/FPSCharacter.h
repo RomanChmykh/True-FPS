@@ -61,6 +61,7 @@ public:
     #pragma endregion
 
     FORCEINLINE UFPSWeaponComponent* GetWeaponComponent() const { return FPSWeaponComponent; }
+    FORCEINLINE bool GetIsAiming() const { return bIsAiming; }
 
 protected:
 	virtual void BeginPlay() override;

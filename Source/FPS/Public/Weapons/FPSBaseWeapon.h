@@ -45,6 +45,8 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+    UAnimMontage* GetRandomAnimMontage(const TArray<UAnimMontage*>& AnimMontages) const;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "SkeletalMesh")
     USkeletalMeshComponent* Body;
 
@@ -56,6 +58,15 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon Parameters")
     EWeaponType WeaponType;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Animations")
+    TArray<UAnimMontage*> CharacterAimShotAnimMontages;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Animations")
+    TArray<UAnimMontage*> CharacterShotAnimMontages;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Animations")
+    TArray<UAnimMontage*> BodyShotAnimMontages;
 
     UPROPERTY(EditDefaultsOnly, Category = "Animations")
     UAnimMontage* CharacterReloadAnimMontage;
