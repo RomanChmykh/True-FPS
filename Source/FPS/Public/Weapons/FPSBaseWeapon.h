@@ -76,4 +76,6 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, Category = "Sockets")
     FName MagazineSocketName;
+
+    FTimerHandle FireTimerHandle;
 };
