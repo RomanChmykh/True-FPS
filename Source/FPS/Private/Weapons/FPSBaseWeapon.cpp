@@ -81,6 +81,7 @@ void AFPSBaseWeapon::AttachToCharacter(AFPSCharacter* const Character)
 
     FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, false);
     AttachToComponent(CharacterMeshComponent, AttachmentRules, SocketName);
+    SetFixClippingFOV(true);
 }
 
 void AFPSBaseWeapon::DetachFromCharacter(AFPSCharacter* const Character) 
@@ -92,12 +93,44 @@ void AFPSBaseWeapon::DetachFromCharacter(AFPSCharacter* const Character)
     Body->SetSimulatePhysics(true);
     Body->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
     CollisionInteractionComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+    SetFixClippingFOV(false);
 }
 
 void AFPSBaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
     CollisionInteractionComponent->AttachToComponent(Body, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+
+    InitializeDynamicMaterials();
+}
+
+void AFPSBaseWeapon::InitializeDynamicMaterials()
+{
+    if (!Body || !Magazine) return;
+
+    UMaterialInterface* BaseMatBody = Body->GetMaterial(0);
+    UMaterialInterface* BaseMatMagazine = Magazine->GetMaterial(0);
+    if (!BaseMatBody || !BaseMatMagazine) return;
+
+    UMaterialInstanceDynamic* DynMatBody = UMaterialInstanceDynamic::Create(BaseMatBody, this);
+    UMaterialInstanceDynamic* DynMatMagazine = UMaterialInstanceDynamic::Create(BaseMatMagazine, this);
+    if (!DynMatBody || !DynMatMagazine) return;
+
+    Body->SetMaterial(0, DynMatBody);
+    Magazine->SetMaterial(0, DynMatMagazine);
+}
+
+void AFPSBaseWeapon::SetFixClippingFOV(bool bEnable)
+{
+    if (!Body || !Magazine) return;
+
+    UMaterialInstanceDynamic* DynMatBody = Cast<UMaterialInstanceDynamic>(Body->GetMaterial(0));
+    UMaterialInstanceDynamic* DynMatMagazine = Cast<UMaterialInstanceDynamic>(Magazine->GetMaterial(0));
+
+    if (!DynMatBody || !DynMatMagazine) return;
+
+    DynMatBody->SetScalarParameterValue(FName("Is Fix Clipping FOV"), bEnable ? 1.0f : 0.0f);
+    DynMatMagazine->SetScalarParameterValue(FName("Is Fix Clipping FOV"), bEnable ? 1.0f : 0.0f);
 }
 
 UAnimMontage* AFPSBaseWeapon::GetRandomAnimMontage(const TArray<UAnimMontage*>& AnimMontages) const 

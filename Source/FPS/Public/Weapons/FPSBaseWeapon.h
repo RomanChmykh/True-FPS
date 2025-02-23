@@ -45,6 +45,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+    void InitializeDynamicMaterials();
+    void SetFixClippingFOV(bool bEnable);
+
     UAnimMontage* GetRandomAnimMontage(const TArray<UAnimMontage*>& AnimMontages) const;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "SkeletalMesh")
