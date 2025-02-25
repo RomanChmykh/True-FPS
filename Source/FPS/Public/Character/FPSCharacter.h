@@ -57,6 +57,8 @@ public:
 
     void UpdateAnimationPitchAndYaw(const FVector2D& Value);
     void CalculateCharacterTurnRightLeft(const FVector2D& Value);
+    void ActivateDeadZone(const FVector2D& Direction);
+    void DeactivateDeadZone();
 
     #pragma endregion
 
@@ -93,4 +95,5 @@ private:
     bool bIsWalk;
     bool bIsSprint;
     bool bIsAiming;
+    bool bIsDeadZoneEnable;
 };

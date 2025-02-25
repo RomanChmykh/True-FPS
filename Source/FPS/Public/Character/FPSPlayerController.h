@@ -45,5 +45,7 @@ private:
     void StartLean(const FInputActionValue& Value);
     void StopLean(const FInputActionValue& Value);
 
+    void ActivateDeadZone(const FInputActionValue& Value);
+
     bool bInvertLookAxis;
 };

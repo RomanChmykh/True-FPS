@@ -24,6 +24,9 @@ public:
     void UpdateAnimationRoll(const float InputRoll);
     void ResetAnimationRoll();
 
+    void ActivateDeadZone(const FVector2D& Direction);
+    void DeactivateDeadZone();
+
     void UpdateWeaponType(EWeaponType NewWeaponType);
     void UpdateCurrentWeaponLHIK(FTransform const LHIKTransform);
 
@@ -68,6 +71,12 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Aiming")
     bool bIsAiming;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Aiming")
+    float AnimationDeadZonePitch;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Aiming")
+    float AnimationDeadZoneYaw;
+
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Hand Sway")
     FTransform CurrentWeaponLHIKTransform;  // current weapon left hand IK transform
 
@@ -76,5 +85,7 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     EWeaponType WeaponType;
+
     FTimerHandle ResetLeaningTimer; // timer for reset roll to default value after leaning
+    FTimerHandle ResetDeadZoneTimer; // timer for reset deadzone pitch and yaw
 };

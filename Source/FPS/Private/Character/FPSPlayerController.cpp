@@ -71,6 +71,9 @@ void AFPSPlayerController::BeginPlay()
         /* Firing*/
         EnhancedInputComponent->BindAction(FPSInputComponent->FireAction, ETriggerEvent::Started, PlayerCharacter, &AFPSCharacter::StartFire);
         EnhancedInputComponent->BindAction(FPSInputComponent->FireAction, ETriggerEvent::Completed, PlayerCharacter, &AFPSCharacter::StopFire);
+
+        /* Aiming Dead Zone*/
+        EnhancedInputComponent->BindAction(FPSInputComponent->LookAction, ETriggerEvent::Triggered, this, &AFPSPlayerController::ActivateDeadZone);
     }
 }
 
@@ -130,4 +133,12 @@ void AFPSPlayerController::StopLean(const FInputActionValue& Value)
     if (!PlayerCharacter) return;
 
     PlayerCharacter->StopLean();
+}
+
+void AFPSPlayerController::ActivateDeadZone(const FInputActionValue& Value)
+{
+    AFPSCharacter* const PlayerCharacter = GetPawn<AFPSCharacter>();
+    if (!PlayerCharacter) return;
+
+    PlayerCharacter->ActivateDeadZone(Value.Get<FVector2D>());
 }

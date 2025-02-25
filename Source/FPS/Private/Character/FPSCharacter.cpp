@@ -214,6 +214,8 @@ void AFPSCharacter::StartAim()
     if (!AnimInstance) return;
 
     bIsAiming = true;
+    bIsDeadZoneEnable = true;
+
     AnimInstance->SetIsAiming(bIsAiming);
 }
 
@@ -226,7 +228,10 @@ void AFPSCharacter::StopAim()
     if (!AnimInstance) return;
 
     bIsAiming = false;
+    bIsDeadZoneEnable = false;
+
     AnimInstance->SetIsAiming(bIsAiming);
+    AnimInstance->DeactivateDeadZone();
 }
 
 void AFPSCharacter::Realod()
@@ -270,4 +275,28 @@ void AFPSCharacter::CalculateCharacterTurnRightLeft(const FVector2D& Value)
         AnimInstance->SetIsTurnRightLeft(false, true);
     else
         AnimInstance->SetIsTurnRightLeft(false, false);
+}
+
+void AFPSCharacter::ActivateDeadZone(const FVector2D& Value)
+{
+    if (!bIsDeadZoneEnable) return;
+
+    USkeletalMeshComponent* const SkeletalMesh = GetMesh();
+    if (!SkeletalMesh) return;
+
+    UFPSBaseCharacterAnimInstance* AnimInstance = Cast<UFPSBaseCharacterAnimInstance>(SkeletalMesh->GetAnimInstance());
+    if (!AnimInstance) return;
+
+    AnimInstance->ActivateDeadZone(Value);
+}
+
+void AFPSCharacter::DeactivateDeadZone() 
+{
+    USkeletalMeshComponent* const SkeletalMesh = GetMesh();
+    if (!SkeletalMesh) return;
+
+    UFPSBaseCharacterAnimInstance* AnimInstance = Cast<UFPSBaseCharacterAnimInstance>(SkeletalMesh->GetAnimInstance());
+    if (!AnimInstance) return;
+
+    AnimInstance->DeactivateDeadZone();
 }
