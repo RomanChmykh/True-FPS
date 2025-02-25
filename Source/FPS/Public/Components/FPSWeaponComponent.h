@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Animations/Character/FPSBaseCharacterAnimInstance.h"
 #include "Weapons/FPSBaseWeapon.h"
 #include "FPSWeaponComponent.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnWeaponTypeChanged, EWeaponType);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnAnimationWeaponParametersChanged, FAnimationWeaponParameters);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnCurrentWeaponLHIKChanged, FTransform);
 
  /**
@@ -34,7 +35,7 @@ public:
 
     FORCEINLINE AFPSBaseWeapon* GetCurrentWeapon() const { return CurrentWeapon; }
 
-    FOnWeaponTypeChanged OnWeaponTypeChanged;
+    FOnAnimationWeaponParametersChanged OnAnimationWeaponParametersChanged;
     FOnCurrentWeaponLHIKChanged OnCurrentWeaponLHIKChanged;
 
 protected:

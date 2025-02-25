@@ -22,6 +22,36 @@ enum class EWeaponType : uint8
     GrenadeLauncher UMETA(DisplayName = "GrenadeLauncher")
 };
 
+USTRUCT(BlueprintType)
+struct FAnimationWeaponParameters
+{
+    GENERATED_BODY()
+
+public:
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+    EWeaponType WeaponType;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+    float DeadZoneSensitivityPitch;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+    float DeadZoneSensitivityYaw;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+    float MinDeadZonePitch;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+    float MaxDeadZonePitch;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+    float MinDeadZoneYaw;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+    float MaxDeadZoneYaw;
+
+    FAnimationWeaponParameters();
+};
+
 UCLASS()
 class FPS_API AFPSBaseWeapon : public AActor, public IFPSInteractebleInterface
 {
@@ -40,7 +70,7 @@ public:
     void AttachToCharacter(AFPSCharacter* const Character);
     void DetachFromCharacter(AFPSCharacter* const Character);
 
-    FORCEINLINE EWeaponType GetWeaponType() const { return WeaponType; }
+    FORCEINLINE FAnimationWeaponParameters GetWeaponType() const { return AnimationWeaponParameters; }
 
 protected:
 	virtual void BeginPlay() override;
@@ -60,7 +90,7 @@ protected:
     USphereComponent* CollisionInteractionComponent;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon Parameters")
-    EWeaponType WeaponType;
+    FAnimationWeaponParameters AnimationWeaponParameters;
 
     UPROPERTY(EditDefaultsOnly, Category = "Animations")
     TArray<UAnimMontage*> CharacterAimShotAnimMontages;

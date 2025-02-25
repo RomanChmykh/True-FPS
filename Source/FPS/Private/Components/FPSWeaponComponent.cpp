@@ -1,6 +1,7 @@
 // First Person Shooter, all rights reserved.
 
 #include "Components/FPSWeaponComponent.h"
+#include "Animations/Character/FPSBaseCharacterAnimInstance.h"
 
 UFPSWeaponComponent::UFPSWeaponComponent()
     : PistolSocketName("Pistol_Socket"), RifleSocketName("Rifle_Socket"), ShotGunSocketName("ShotGun_Socket"), 
@@ -32,7 +33,7 @@ void UFPSWeaponComponent::PickUpWeapon(AFPSBaseWeapon* Weapon)
         CurrentWeapon = Weapon;
     }
 
-    OnWeaponTypeChanged.Broadcast(Weapon->GetWeaponType());
+    OnAnimationWeaponParametersChanged.Broadcast(Weapon->GetWeaponType());
     OnCurrentWeaponLHIKChanged.Broadcast(CalculateCurrentWeaponLHIKTransform());
 }
 

@@ -45,7 +45,7 @@ void AFPSCharacter::BeginPlay()
     UFPSBaseCharacterAnimInstance* AnimInstance = Cast<UFPSBaseCharacterAnimInstance>(SkeletalMesh->GetAnimInstance());
     if (!AnimInstance) return;
 
-    FPSWeaponComponent->OnWeaponTypeChanged.AddUObject(AnimInstance, &UFPSBaseCharacterAnimInstance::UpdateWeaponType);
+    FPSWeaponComponent->OnAnimationWeaponParametersChanged.AddUObject(AnimInstance, &UFPSBaseCharacterAnimInstance::UpdateAnamationWeaponParameters);
     FPSWeaponComponent->OnCurrentWeaponLHIKChanged.AddUObject(AnimInstance, &UFPSBaseCharacterAnimInstance::UpdateCurrentWeaponLHIK);
 }
 

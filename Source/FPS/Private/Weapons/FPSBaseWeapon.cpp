@@ -27,6 +27,12 @@ AFPSBaseWeapon::AFPSBaseWeapon(const FObjectInitializer& ObjectInitializer) : Su
     CollisionInteractionComponent->SetSphereRadius(CollisionSphereRadius);
 }
 
+FAnimationWeaponParameters::FAnimationWeaponParameters()
+    : WeaponType(EWeaponType::WithoutWeapon), DeadZoneSensitivityPitch(0.0f), DeadZoneSensitivityYaw(0.0f), MinDeadZonePitch(0.0f),
+      MaxDeadZonePitch(0.0f), MinDeadZoneYaw(0.0f), MaxDeadZoneYaw(0.0f)
+{
+}
+
 void AFPSBaseWeapon::Interact(AFPSCharacter* const Character) 
 {
 
@@ -66,7 +72,7 @@ void AFPSBaseWeapon::AttachToCharacter(AFPSCharacter* const Character)
     if (!CharacterMeshComponent) return;
 
     FName SocketName;
-    switch (WeaponType)
+    switch (AnimationWeaponParameters.WeaponType)
     {
         case EWeaponType::Pistol: SocketName = FName("Pistol_Socket"); break;
         case EWeaponType::Rifle: SocketName = FName("Rifle_Socket"); break;

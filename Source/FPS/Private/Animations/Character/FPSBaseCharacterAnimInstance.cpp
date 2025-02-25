@@ -105,8 +105,11 @@ void UFPSBaseCharacterAnimInstance::ResetAnimationRoll()
 
 void UFPSBaseCharacterAnimInstance::ActivateDeadZone(const FVector2D& Value)
 {
-    AnimationDeadZoneYaw = FMath::Clamp(AnimationDeadZoneYaw + (Value.X * 0.04), -7.5f, 7.5f);
-    AnimationDeadZonePitch = FMath::Clamp(AnimationDeadZonePitch + (Value.Y * 0.0625), -3.f, 3.f);
+    AnimationDeadZoneYaw = FMath::Clamp(AnimationDeadZoneYaw + (Value.X * AnimationWeaponParameters.DeadZoneSensitivityYaw),
+        AnimationWeaponParameters.MinDeadZoneYaw, AnimationWeaponParameters.MaxDeadZoneYaw);
+
+    AnimationDeadZonePitch = FMath::Clamp(AnimationDeadZonePitch + (Value.Y * AnimationWeaponParameters.DeadZoneSensitivityPitch),
+        AnimationWeaponParameters.MinDeadZonePitch, AnimationWeaponParameters.MaxDeadZonePitch);
 }
 
 void UFPSBaseCharacterAnimInstance::DeactivateDeadZone() 
@@ -131,9 +134,9 @@ void UFPSBaseCharacterAnimInstance::DeactivateDeadZone()
     }
 }
 
-void UFPSBaseCharacterAnimInstance::UpdateWeaponType(EWeaponType NewWeaponType)
+void UFPSBaseCharacterAnimInstance::UpdateAnamationWeaponParameters(FAnimationWeaponParameters AnimationWeaponParameter)
 {
-    WeaponType = NewWeaponType;
+    AnimationWeaponParameters = AnimationWeaponParameter;
 }
 
 void UFPSBaseCharacterAnimInstance::UpdateCurrentWeaponLHIK(FTransform const LHIKTransform) 

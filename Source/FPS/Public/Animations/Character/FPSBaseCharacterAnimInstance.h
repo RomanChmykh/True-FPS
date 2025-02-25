@@ -4,12 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "Weapons/FPSBaseWeapon.h"
 #include "FPSBaseCharacterAnimInstance.generated.h"
 
 class AFPSCharacter;
-enum class EWeaponType : uint8;
+
     /**
- * 
+ *    Base Anim Instance for Player Character
  */
 UCLASS()
 class FPS_API UFPSBaseCharacterAnimInstance : public UAnimInstance
@@ -27,7 +28,7 @@ public:
     void ActivateDeadZone(const FVector2D& Direction);
     void DeactivateDeadZone();
 
-    void UpdateWeaponType(EWeaponType NewWeaponType);
+    void UpdateAnamationWeaponParameters(FAnimationWeaponParameters AnimationWeaponParameters);
     void UpdateCurrentWeaponLHIK(FTransform const LHIKTransform);
 
     void SetIsAiming(const bool IsAiming);
@@ -80,11 +81,11 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Hand Sway")
     FTransform CurrentWeaponLHIKTransform;  // current weapon left hand IK transform
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Current Weapon Animation Parameters")
     AFPSCharacter* PlayerCharacter;
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-    EWeaponType WeaponType;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+    FAnimationWeaponParameters AnimationWeaponParameters;
 
     FTimerHandle ResetLeaningTimer; // timer for reset roll to default value after leaning
     FTimerHandle ResetDeadZoneTimer; // timer for reset deadzone pitch and yaw
