@@ -70,7 +70,11 @@ public:
     void AttachToCharacter(AFPSCharacter* const Character);
     void DetachFromCharacter(AFPSCharacter* const Character);
 
+    void MakeShot(AFPSCharacter* const Character);
+    void PlayBodyAndMagazineAnimations(AFPSCharacter* const Character);
+
     FORCEINLINE FAnimationWeaponParameters GetWeaponType() const { return AnimationWeaponParameters; }
+    FORCEINLINE USkeletalMeshComponent* GetMeshBody() const { return Body; }
 
 protected:
 	virtual void BeginPlay() override;

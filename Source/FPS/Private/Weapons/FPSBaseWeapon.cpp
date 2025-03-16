@@ -102,6 +102,71 @@ void AFPSBaseWeapon::DetachFromCharacter(AFPSCharacter* const Character)
     SetFixClippingFOV(false);
 }
 
+void AFPSBaseWeapon::MakeShot(AFPSCharacter* const Character)
+{
+    if (!GetWorld()) return;
+
+    if (USkeletalMeshComponent* WeaponMesh = GetMeshBody())
+    {
+        FTransform MuzzleTransform = WeaponMesh->GetSocketTransform("muzzleFlash");
+        FVector MuzzleLocation = MuzzleTransform.GetLocation();
+        FVector MuzzleDirection = MuzzleTransform.GetRotation().Vector();
+
+        float SpreadAngle = 2.0f;
+        float RandYaw = FMath::RandRange(-SpreadAngle, SpreadAngle);
+        float RandPitch = FMath::RandRange(-SpreadAngle, SpreadAngle);
+
+        FRotator SpreadRot = MuzzleDirection.Rotation();
+        SpreadRot.Yaw += RandYaw;
+        SpreadRot.Pitch += RandPitch;
+        FVector FinalDirection = SpreadRot.Vector();
+
+        FVector TraceEnd = MuzzleLocation + (FinalDirection * 5000.0f);
+
+        FHitResult HitResult;
+        FCollisionQueryParams QueryParams;
+        QueryParams.AddIgnoredActor(this);
+        QueryParams.AddIgnoredActor(GetOwner());
+
+        bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, MuzzleLocation, TraceEnd, ECC_Visibility, QueryParams);
+
+        if (bHit)
+        {
+            TraceEnd = HitResult.ImpactPoint;
+
+            if (HitResult.GetActor())
+            {
+                FString HitObjectName = HitResult.GetActor()->GetName();
+                GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("Hit: %s"), *HitObjectName));
+
+                DrawDebugSphere(GetWorld(), TraceEnd, 5.0f, 12, FColor::Red, false, 1.0f);
+            }
+        }
+
+        DrawDebugLine(GetWorld(), MuzzleLocation, TraceEnd, FColor::Green, false, 1.0f, 0, 1.5f);
+    }
+
+    PlayBodyAndMagazineAnimations(Character);
+}
+
+void AFPSBaseWeapon::PlayBodyAndMagazineAnimations(AFPSCharacter* const Character)
+{
+    UAnimInstance* const ChatacterAnimInstance = Character->GetMesh()->GetAnimInstance();
+    if (!ChatacterAnimInstance) return;
+
+    UAnimInstance* const BodyAnimInstance = Body->GetAnimInstance();
+    if (!BodyAnimInstance) return;
+
+    const bool IsAiming = Character->GetIsAiming();
+
+    if (IsAiming)
+        ChatacterAnimInstance->Montage_Play(GetRandomAnimMontage(CharacterAimShotAnimMontages));
+    else
+        ChatacterAnimInstance->Montage_Play(GetRandomAnimMontage(CharacterShotAnimMontages));
+
+    BodyAnimInstance->Montage_Play(GetRandomAnimMontage(BodyShotAnimMontages));
+}
+
 void AFPSBaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
