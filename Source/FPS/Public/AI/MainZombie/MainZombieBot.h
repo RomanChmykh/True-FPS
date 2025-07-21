@@ -17,6 +17,13 @@ class FPS_API AMainZombieBot : public ABaseZombieBot
 public:
     AMainZombieBot();
 
+    UFUNCTION(BlueprintCallable, Category = "Movement", meta = (ToolTip = "Moves the character in the specified direction. Direction should be a normalized vector."))
+    void Move(const FVector2D& Direction);
+    void StopMove();
+
+    void StartAttack();
+    void StopAttack();
+
 protected:
     virtual void BeginPlay() override;
 

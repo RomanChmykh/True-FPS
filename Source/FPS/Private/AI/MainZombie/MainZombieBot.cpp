@@ -25,3 +25,23 @@ void AMainZombieBot::BeginPlay()
 {
     Super::BeginPlay();
 }
+
+void AMainZombieBot::Move(const FVector2D& Direction) 
+{
+
+}
+
+void AMainZombieBot::StopMove() 
+{
+
+}
+
+void AMainZombieBot::StartAttack()
+{
+
+}
+
+void AMainZombieBot::StopAttack() 
+{
+
+}
