@@ -20,4 +20,7 @@ protected:
 
     UFUNCTION()
     void OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
+
+    UPROPERTY(EditDefaultsOnly, Category = "AI")
+    UBehaviorTree* BehaviorTreeAsset;
 };

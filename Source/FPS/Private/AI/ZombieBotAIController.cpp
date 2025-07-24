@@ -11,7 +11,10 @@ AZombieBotAIController::AZombieBotAIController()
 
 void AZombieBotAIController::BeginPlay()
 {
+    Super::BeginPlay();
 
+    if (!BehaviorTreeAsset) return;
+    RunBehaviorTree(BehaviorTreeAsset);
 }
 
 void AZombieBotAIController::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus) 
