@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
+#include "AIController.h"
+#include "Navigation/PathFollowingComponent.h"
 #include "FPSMoveToRandomLocationBTT.generated.h"
 
 /**
@@ -18,4 +20,14 @@ public:
     UFPSMoveToRandomLocationBTT();
 
     virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+    virtual void OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult) override;
+
+private:
+    FDelegateHandle MoveFinishedHandle;
+    AAIController* CachedAIController;
+    FAIRequestID MoveRequestID;
+
+    bool FindRandomLocationAndMove(UBehaviorTreeComponent& OwnerComp);
+
+    void OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result);
 };
