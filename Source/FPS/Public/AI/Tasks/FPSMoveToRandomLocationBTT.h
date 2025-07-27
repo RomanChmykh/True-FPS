@@ -19,15 +19,15 @@ class FPS_API UFPSMoveToRandomLocationBTT : public UBTTaskNode
 public:
     UFPSMoveToRandomLocationBTT();
 
+protected:
     virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
-    virtual void OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult) override;
+    virtual void OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result);
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Property)
+    float RadiusToPatroll;
 
 private:
-    FDelegateHandle MoveFinishedHandle;
     AAIController* CachedAIController;
-    FAIRequestID MoveRequestID;
-
-    bool FindRandomLocationAndMove(UBehaviorTreeComponent& OwnerComp);
-
-    void OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result);
+    FDelegateHandle MoveFinishedHandle;
+    FAIRequestID CachedMoveRequestID;
 };

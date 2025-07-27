@@ -15,11 +15,11 @@ class FPS_API AZombieBotAIController : public AAIController
 public:
     AZombieBotAIController();
 
+    UFUNCTION()
+    void OnHandleTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
+
 protected:
     virtual void BeginPlay() override;
-
-    UFUNCTION()
-    void OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
 
     UPROPERTY(EditDefaultsOnly, Category = "AI")
     UBehaviorTree* BehaviorTreeAsset;

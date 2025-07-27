@@ -8,6 +8,7 @@
 #include "GameFramework/Character.h"
 
 UFPSMoveToRandomLocationBTT::UFPSMoveToRandomLocationBTT()
+    : RadiusToPatroll(1000.f), CachedAIController(nullptr), MoveFinishedHandle(FDelegateHandle{}), CachedMoveRequestID(FAIRequestID{})
 {
     NodeName = "Move To Random Location";
     bNotifyTick = false;
@@ -17,96 +18,57 @@ UFPSMoveToRandomLocationBTT::UFPSMoveToRandomLocationBTT()
 EBTNodeResult::Type UFPSMoveToRandomLocationBTT::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
     CachedAIController = OwnerComp.GetAIOwner();
-    if (!CachedAIController)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("No AIController"));
+    APawn* const AIPawn = CachedAIController ? CachedAIController->GetPawn() : nullptr;
+
+    if (!AIPawn || !CachedAIController) 
         return EBTNodeResult::Failed;
-    }
 
-    UPathFollowingComponent* PathComp = CachedAIController->GetPathFollowingComponent();
-    if (!PathComp)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("No PathFollowingComponent"));
+    UNavigationSystemV1* const NavSystem = FNavigationSystem::GetCurrent<UNavigationSystemV1>(AIPawn->GetWorld());
+    if (!NavSystem)
         return EBTNodeResult::Failed;
-    }
 
-    MoveFinishedHandle = PathComp->OnRequestFinished.AddUObject(this, &UFPSMoveToRandomLocationBTT::OnMoveCompleted);
-
-    if (!FindRandomLocationAndMove(OwnerComp))
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Failed to find random location"));
-        PathComp->OnRequestFinished.Remove(MoveFinishedHandle);
-        return EBTNodeResult::Failed;
-    }
-
-    return EBTNodeResult::InProgress;
-}
-
-bool UFPSMoveToRandomLocationBTT::FindRandomLocationAndMove(UBehaviorTreeComponent& OwnerComp)
-{
-    if (!CachedAIController)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("No AIController"));
-        return false;
-    }
-
-    APawn* Pawn = CachedAIController->GetPawn();
-    if (!Pawn)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("No Pawn"));
-        return false;
-    }
-
-    UNavigationSystemV1* NavSys = UNavigationSystemV1::GetCurrent(GetWorld());
-    if (!NavSys)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("No NavigationSystem"));
-        return false;
-    }
-
+    FVector Origin = AIPawn->GetActorLocation();
     FNavLocation RandomLocation;
-    const float Radius = 1000.f;
 
-    if (!NavSys->GetRandomPointInNavigableRadius(Pawn->GetActorLocation(), Radius, RandomLocation))
+    if (NavSystem->GetRandomReachablePointInRadius(Origin, 1000.f, RandomLocation))
     {
-        UE_LOG(LogTemp, Warning, TEXT("Failed to find random point"));
-        return false;
+        FAIMoveRequest MoveRequest;
+        MoveRequest.SetGoalLocation(RandomLocation.Location);
+        MoveRequest.SetAcceptanceRadius(5.f);
+        MoveRequest.SetNavigationFilter(nullptr);
+
+        FNavPathSharedPtr NavPath;
+        FPathFollowingRequestResult Result = CachedAIController->MoveTo(MoveRequest, &NavPath);
+
+        if (Result.Code == EPathFollowingRequestResult::RequestSuccessful)
+        {
+            CachedMoveRequestID = Result.MoveId;
+
+            MoveFinishedHandle = CachedAIController->GetPathFollowingComponent()->OnRequestFinished.AddUObject(
+                this, &UFPSMoveToRandomLocationBTT::OnMoveCompleted);
+
+            return EBTNodeResult::InProgress;
+        }
     }
 
-    MoveRequestID = CachedAIController->MoveToLocation(RandomLocation.Location);
-    if (!MoveRequestID.IsValid())
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Invalid MoveRequestID"));
-        return false;
-    }
-
-    UE_LOG(LogTemp, Log, TEXT("Moving to location: %s"), *RandomLocation.Location.ToString());
-
-    return true;
+    return EBTNodeResult::Failed;
 }
 
 void UFPSMoveToRandomLocationBTT::OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result)
 {
-    UE_LOG(LogTemp, Log, TEXT("OnMoveCompleted called with Result: %d"), (int)Result.Code);
+    if (!RequestID.IsEquivalent(CachedMoveRequestID))
+        return;
 
-    if (UBehaviorTreeComponent* BTComp = Cast<UBehaviorTreeComponent>(CachedAIController->BrainComponent))
+    if (!CachedAIController)
+        return;
+
+    UBehaviorTreeComponent* const BTComponent = Cast<UBehaviorTreeComponent>(CachedAIController->BrainComponent);
+
+    if (BTComponent)
     {
         CachedAIController->GetPathFollowingComponent()->OnRequestFinished.Remove(MoveFinishedHandle);
 
-        if (Result.IsSuccess())
-        {
-            FinishLatentTask(*BTComp, EBTNodeResult::Succeeded);
-        }
-        else
-        {
-            FinishLatentTask(*BTComp, EBTNodeResult::Failed);
-        }
+        const EBTNodeResult::Type TaskResult = Result.IsSuccess() ? EBTNodeResult::Succeeded : EBTNodeResult::Failed;
+        FinishLatentTask(*BTComponent, TaskResult);
     }
-}
-
-void UFPSMoveToRandomLocationBTT::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult)
-{
-    Super::OnTaskFinished(OwnerComp, NodeMemory, TaskResult);
-
-    UE_LOG(LogTemp, Log, TEXT("Task finished with result: %s"), *UEnum::GetValueAsString(TaskResult));
 }

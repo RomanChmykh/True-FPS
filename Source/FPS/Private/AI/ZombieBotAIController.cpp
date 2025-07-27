@@ -15,9 +15,14 @@ void AZombieBotAIController::BeginPlay()
 
     if (!BehaviorTreeAsset) return;
     RunBehaviorTree(BehaviorTreeAsset);
+
+    if (!PerceptionComponent) return;
+    PerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AZombieBotAIController::OnHandleTargetPerceptionUpdated);
 }
 
-void AZombieBotAIController::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus) 
+void AZombieBotAIController::OnHandleTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus) 
 {
+    Blackboard->SetValueAsObject("BB_PlayerCharacter", Actor); // hard code perceprion key name for player character chasing by bot 
 
+    Blackboard->SetValueAsBool("bSeePlayer", Stimulus.WasSuccessfullySensed()); // hard code perceprion key name if bot see player chacacter
 }
