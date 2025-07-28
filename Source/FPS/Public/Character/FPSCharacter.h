@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GenericTeamAgentInterface.h"
 #include "FPSCharacter.generated.h"
 
 class UCameraComponent;
@@ -11,7 +12,7 @@ class USkeletalMeshComponent;
 class UFPSWeaponComponent;
 
 UCLASS()
-class FPS_API AFPSCharacter : public ACharacter
+class FPS_API AFPSCharacter : public ACharacter, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -19,6 +20,7 @@ public:
     AFPSCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+    virtual FGenericTeamId GetGenericTeamId() const override { return FGenericTeamId(0); }
 
 	#pragma region Moving
 

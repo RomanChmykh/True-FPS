@@ -23,7 +23,7 @@ protected:
     virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
     virtual void OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result);
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Property)
+    UPROPERTY(EditAnywhere, Category = Property)
     float RadiusToPatroll;
 
 private:

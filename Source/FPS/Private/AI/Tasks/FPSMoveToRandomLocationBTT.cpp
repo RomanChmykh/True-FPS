@@ -30,7 +30,7 @@ EBTNodeResult::Type UFPSMoveToRandomLocationBTT::ExecuteTask(UBehaviorTreeCompon
     FVector Origin = AIPawn->GetActorLocation();
     FNavLocation RandomLocation;
 
-    if (NavSystem->GetRandomReachablePointInRadius(Origin, 1000.f, RandomLocation))
+    if (NavSystem->GetRandomReachablePointInRadius(Origin, RadiusToPatroll, RandomLocation))
     {
         FAIMoveRequest MoveRequest;
         MoveRequest.SetGoalLocation(RandomLocation.Location);

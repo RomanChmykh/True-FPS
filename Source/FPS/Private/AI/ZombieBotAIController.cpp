@@ -18,6 +18,8 @@ void AZombieBotAIController::BeginPlay()
 
     if (!PerceptionComponent) return;
     PerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AZombieBotAIController::OnHandleTargetPerceptionUpdated);
+
+    SetGenericTeamId(FGenericTeamId(1));
 }
 
 void AZombieBotAIController::OnHandleTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus) 
