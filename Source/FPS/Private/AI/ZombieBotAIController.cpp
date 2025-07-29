@@ -28,3 +28,13 @@ void AZombieBotAIController::OnHandleTargetPerceptionUpdated(AActor* Actor, FAIS
 
     Blackboard->SetValueAsBool("bSeePlayer", Stimulus.WasSuccessfullySensed()); // hard code perceprion key name if bot see player chacacter
 }
+
+ETeamAttitude::Type AZombieBotAIController::GetTeamAttitudeTowards(const AActor& Other) const 
+{
+    const IGenericTeamAgentInterface* const OtherTeamAgent = Cast<IGenericTeamAgentInterface>(&Other);
+    if (!OtherTeamAgent) return ETeamAttitude::Neutral;
+
+    if (OtherTeamAgent->GetGenericTeamId() == FGenericTeamId(0)) return ETeamAttitude::Hostile;
+
+    return ETeamAttitude::Neutral;
+}

@@ -18,6 +18,9 @@ public:
     UFUNCTION()
     void OnHandleTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
 
+    virtual FGenericTeamId GetGenericTeamId() const override { return FGenericTeamId(1); }
+    virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
+
 protected:
     virtual void BeginPlay() override;
 
